@@ -683,7 +683,13 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
             className="flex flex-wrap justify-center gap-4"
           >
             <button
-              onClick={() => setIsImportModalOpen(true)}
+              onClick={() => {
+                if (!isPro && Object.keys(appState.profiles).length >= 3) {
+                  alert("You have reached the maximum number of 3 resumes for non-pro users. Please upgrade to Pro or delete an existing resume to import a new one.");
+                  return;
+                }
+                setIsImportModalOpen(true);
+              }}
               className="bg-white px-6 py-3 rounded-full flex items-center justify-center gap-2 text-xs md:text-sm tracking-widest hover:bg-[#eceae4] transition-colors text-[#1c1c1c] border border-[#eceae4] shadow-sm whitespace-nowrap"
             >
               <LucideIcons.Upload className="w-4 h-4 text-accent" /> Upload Resume
