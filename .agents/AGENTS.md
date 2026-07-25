@@ -21,16 +21,18 @@ Always use these commands to self-verify your work. Do not guess; execute and ve
 - **Output Rule**: "Success is silent, failures are verbose." If a build or test command passes, simply report "Pass". Do NOT output the full success logs into the context. Only output logs if the command fails to help with debugging.
 
 > **🎯 Definition of Done**: A task is ONLY complete when: 
-> 1. Code is written. 
-> 2. Fast Check (`tsc` & `lint`) passes. 
-> 3. Unit Tests pass. 
-> 4. `HumanMap.md`, `AgentMap.yaml`, or Skill SOPs (`.agents/skills/`) are updated if architecture, file paths, or core commands change. 
-> 5. (For Major Features) The Plan Critic Sub-agent has reviewed and approved the implementation.
+> 1. Test Cases (Unit/Integration) are written FIRST and fail initially (TDD).
+> 2. Code is written to make the tests pass.
+> 3. `npm run test` (vitest run) passes.
+> 4. Fast Check (`tsc` & `lint`) passes. 
+> 5. `HumanMap.md`, `AgentMap.yaml`, or Skill SOPs (`.agents/skills/`) are updated if architecture, file paths, or core commands change. 
+> 6. (For Major Features) The Plan Critic Sub-agent has reviewed and approved the implementation.
 
 > **✅ Completion Checklist** (write to brain dir or `.agents/STATE.md` before declaring done):
-> - [ ] Code written and self-reviewed
-> - [ ] `npm run check` (tsc + eslint): PASS
+> - [ ] Tests written FIRST (TDD approach followed)
+> - [ ] Code written to pass the tests
 > - [ ] `npm run test` (vitest run): PASS
+> - [ ] `npm run check` (tsc + eslint): PASS
 > - [ ] `npm run build`: PASS (if build-affecting change)
 > - [ ] AgentMap.yaml updated: YES/NO
 > - [ ] HumanMap.md updated: YES/NO
@@ -50,10 +52,10 @@ Always use these commands to self-verify your work. Do not guess; execute and ve
    - Absolutely NO modifications to `AGENTS.md` or any rules/skills within the `.agents/` directory unless the user explicitly requests an "agent rule update". These files are read-only directives.
 5. **Circuit Breaker (Loop Engineering)**:
    - If a test or compilation command fails 3 consecutive times, you MUST immediately STOP all actions and report a summary of the failure to the user. Do NOT blindly guess or infinite loop.
-6. **State Persistence**:
+6. **State Persistence & Regression Defense**:
    - For tasks requiring multiple steps, write your progress to a temporary `task.md` artifact in your brain directory, or `.agents/STATE.md`. Agents forget, but the filesystem remembers.
-   - Before starting any task, read `.agents/LESSONS.md` for accumulated project knowledge and non-obvious constraints.
-   - After completing a task that involved a non-obvious fix or discovered a new constraint, append a lesson entry to `.agents/LESSONS.md` (append-only, dated).
+   - Before starting any task, read `.agents/LESSONS.md` for accumulated project history and context.
+   - **MANDATORY**: If you encounter a bug, a non-obvious limitation, or break existing functionality, do NOT just append a warning to `LESSONS.md`. You MUST write a **Regression Test** that simulates the failure scenario. Ensure this test is added to the CI/Test suite so the issue can never be silently re-introduced. The test runner is your source of truth.
 
 ## 📋 Progressive Workflow & Skills
 To prevent cognitive overload, do NOT guess the workflow. Instead, read the appropriate Skill SOP from the `.agents/skills/` directory before executing a task. 
