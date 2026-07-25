@@ -17,7 +17,7 @@ import { EditorLayoutProps } from '../components/editor/EditorLayoutProps';
 export default function EditorPage() {
   useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { user, signOut, isPro } = useAuth();
+  const { user, signOut, isPro, isAdmin } = useAuth();
   
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
@@ -49,7 +49,7 @@ export default function EditorPage() {
 
   useEffect(() => {
     if (location.state?.openImport) {
-      if (!isPro && Object.keys(appState.profiles).length >= 3) {
+      if (!isPro && !isAdmin && Object.keys(appState.profiles).length >= 3) {
         alert("You have reached the maximum number of 3 resumes for non-pro users. Please upgrade to Pro or delete an existing resume to import a new one.");
       } else {
         // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -57,7 +57,7 @@ export default function EditorPage() {
       }
       window.history.replaceState({}, document.title);
     }
-  }, [location, isPro, appState.profiles]);
+  }, [location, isPro, isAdmin, appState.profiles]);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -302,7 +302,8 @@ export default function EditorPage() {
     handleTabClick, snapshotUrl, setSnapshotUrl, copiedSection, setCopiedSection, isInitializingLive,
     handleCopyLink, ensureLiveLink, handleExportPDF, direction, setDirection,
     isShareModalOpen, setIsShareModalOpen, blockToDelete, profileToDelete, setIsImportModalOpen, variants,
-    isPro
+    isPro,
+    isAdmin
   };
 
   return (
@@ -317,7 +318,7 @@ export default function EditorPage() {
         isOpen={isImportModalOpen}
         onClose={() => setIsImportModalOpen(false)}
         onImport={(parsedData) => {
-          if (!isPro && Object.keys(appState.profiles).length >= 3) {
+          if (!isPro && !isAdmin && Object.keys(appState.profiles).length >= 3) {
             alert("You have reached the maximum number of 3 resumes for non-pro users. Please upgrade to Pro or delete an existing resume to import a new one.");
             return;
           }

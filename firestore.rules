@@ -12,6 +12,11 @@ service cloud.firestore {
       allow read: if request.auth != null && request.auth.uid == userId;
     }
 
+    // 開放讀取 admins 列表以同步前端判斷
+    match /admins/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+    }
+
     // 使用者主體設定存取
     match /users/{userId} {
       allow get: if request.auth != null && request.auth.uid == userId;
@@ -30,7 +35,7 @@ service cloud.firestore {
             !("profiles" in request.resource.data) ||
             request.resource.data.profiles.size() <= 3 ||
             (resource != null && "profiles" in resource.data && request.resource.data.profiles.size() <= resource.data.profiles.size()) ||
-            exists(/databases/$(database)/documents/users_pro/$(request.auth.uid))
+            (exists(/databases/$(database)/documents/users_pro/$(request.auth.uid)) || exists(/databases/$(database)/documents/admins/$(request.auth.uid)))
           );
       }
     }
@@ -41,13 +46,13 @@ service cloud.firestore {
         && request.resource.data.keys().hasAll(['profile', 'blocks', 'blockOrder', 'createdAt'])
         && request.resource.data.keys().hasOnly(['profile', 'blocks', 'blockOrder', 'createdAt', 'themeColor', 'enableAnimation', 'isPro'])
         && (
-          exists(/databases/$(database)/documents/users_pro/$(request.auth.uid))
+          (exists(/databases/$(database)/documents/users_pro/$(request.auth.uid)) || exists(/databases/$(database)/documents/admins/$(request.auth.uid)))
           || get(/databases/$(database)/documents/users/$(request.auth.uid)/userState/state).data.profiles.size() <= 3
         )
         && (
           !('isPro' in request.resource.data) ||
           request.resource.data.isPro == false ||
-          (request.resource.data.isPro == true && exists(/databases/$(database)/documents/users_pro/$(request.auth.uid)))
+          (request.resource.data.isPro == true && (exists(/databases/$(database)/documents/users_pro/$(request.auth.uid)) || exists(/databases/$(database)/documents/admins/$(request.auth.uid))))
         );
       allow get: if true;
       allow list: if false;
@@ -60,13 +65,13 @@ service cloud.firestore {
         && request.resource.data.keys().hasAll(['profile', 'blocks', 'blockOrder'])
         && request.resource.data.ownerUid == request.auth.uid
         && (
-          exists(/databases/$(database)/documents/users_pro/$(request.auth.uid))
+          (exists(/databases/$(database)/documents/users_pro/$(request.auth.uid)) || exists(/databases/$(database)/documents/admins/$(request.auth.uid)))
           || get(/databases/$(database)/documents/users/$(request.auth.uid)/userState/state).data.profiles.size() <= 3
         )
         && (
           !('isPro' in request.resource.data) ||
           request.resource.data.isPro == false ||
-          (request.resource.data.isPro == true && exists(/databases/$(database)/documents/users_pro/$(request.auth.uid)))
+          (request.resource.data.isPro == true && (exists(/databases/$(database)/documents/users_pro/$(request.auth.uid)) || exists(/databases/$(database)/documents/admins/$(request.auth.uid))))
         );
       allow get: if true;
       allow list: if false;

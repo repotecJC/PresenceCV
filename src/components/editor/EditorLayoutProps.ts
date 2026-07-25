@@ -41,5 +41,6 @@ export interface EditorLayoutProps extends UseResumeReturn {
   variants: any;
 
   handleExportPDF: () => void;
-  isPro: boolean;
+  isPro?: boolean;
+  isAdmin?: boolean;
 }

@@ -1,5 +1,34 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { renderHook, act } from '@testing-library/react';
 import { ParsedResumeSchema } from '../src/types';
+import { useResume } from '../src/hooks/useResume';
+import * as firestore from 'firebase/firestore';
+
+vi.mock('firebase/firestore', async () => {
+  const actual = await vi.importActual('firebase/firestore');
+  return {
+    ...actual,
+    doc: vi.fn(),
+    getDoc: vi.fn().mockResolvedValue({
+      exists: () => false,
+      data: () => null
+    }),
+    setDoc: vi.fn(),
+    runTransaction: vi.fn(),
+  };
+});
+
+vi.mock('firebase/auth', () => ({
+  onAuthStateChanged: vi.fn((auth, cb) => {
+    cb({ uid: 'test-user-123' });
+    return () => {};
+  })
+}));
+
+vi.mock('../src/lib/firebase', () => ({
+  auth: { currentUser: { uid: 'test-user-123' } },
+  db: {}
+}));
 
 describe('useResume Zod Validation', () => {
   it('parses perfect data correctly', () => {
@@ -29,5 +58,111 @@ describe('useResume Zod Validation', () => {
     expect(parsed.experience).toEqual([]);
     expect(parsed.skills).toEqual([]);
     expect(parsed.profile.title).toBe('');
+  });
+});
+
+describe('useResume Transaction Logic', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    localStorage.clear();
+  });
+
+  it('syncStructuralChange correctly merges when remote is newer', async () => {
+    // We will simulate the transaction logic by capturing the callback passed to runTransaction
+    // and manually invoking it with a mock transaction object.
+    
+    // Define a mock transaction
+    const mockTransaction = {
+      get: vi.fn(),
+      set: vi.fn()
+    };
+
+    // Setup runTransaction to immediately invoke the callback
+    vi.mocked(firestore.runTransaction).mockImplementation(async (db, updateFunction) => {
+      await updateFunction(mockTransaction as any);
+    });
+
+    const { result } = renderHook(() => useResume());
+    
+    // Simulate remote data being newer
+    const remoteData = {
+      updatedAt: Date.now() + 100000,
+      activeProfileId: 'main',
+      profiles: {
+        'remote_1': { id: 'remote_1', data: {} }
+      }
+    };
+    mockTransaction.get.mockResolvedValue({
+      data: () => remoteData
+    });
+
+    // Fire deleteProfile to trigger syncStructuralChange
+    await act(async () => {
+      result.current.createProfile('test');
+    });
+
+    const newProfiles = Object.keys(result.current.appState.profiles);
+    const newProfileId = newProfiles.find(id => id !== 'main');
+
+    mockTransaction.set.mockClear();
+
+    await act(async () => {
+      result.current.deleteProfile(newProfileId!);
+    });
+
+    expect(mockTransaction.set).toHaveBeenCalled();
+    const setArgs = mockTransaction.set.mock.calls[0];
+    const savedData = setArgs[1];
+
+    // Since remote was newer, we expect 'remote_1' to be merged with local profiles
+    expect(savedData.profiles).toHaveProperty('remote_1');
+    // Local 'main' should still be there
+    expect(savedData.profiles).toHaveProperty('main');
+  });
+
+  it('syncStructuralChange overwrites when remote is older', async () => {
+    const mockTransaction = {
+      get: vi.fn(),
+      set: vi.fn()
+    };
+
+    vi.mocked(firestore.runTransaction).mockImplementation(async (db, updateFunction) => {
+      await updateFunction(mockTransaction as any);
+    });
+
+    const { result } = renderHook(() => useResume());
+    
+    // Simulate remote data being older
+    const remoteData = {
+      updatedAt: Date.now() - 100000,
+      activeProfileId: 'main',
+      profiles: {
+        'remote_1': { id: 'remote_1', data: {} } // should be lost
+      }
+    };
+    mockTransaction.get.mockResolvedValue({
+      data: () => remoteData
+    });
+
+    await act(async () => {
+      result.current.createProfile('test2');
+    });
+
+    const newProfiles = Object.keys(result.current.appState.profiles);
+    const newProfileId = newProfiles.find(id => id !== 'main')!;
+    
+    mockTransaction.set.mockClear();
+
+    await act(async () => {
+      result.current.deleteProfile(newProfileId);
+    });
+
+    expect(mockTransaction.set).toHaveBeenCalled();
+    const setArgs = mockTransaction.set.mock.calls[0];
+    const savedData = setArgs[1];
+
+    // Since remote was older, it should just overwrite with local state which only has 'main' now.
+    expect(savedData.profiles).not.toHaveProperty('remote_1');
+    expect(savedData.profiles).toHaveProperty('main');
   });
 });

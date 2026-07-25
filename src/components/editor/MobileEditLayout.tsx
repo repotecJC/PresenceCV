@@ -27,7 +27,7 @@ export default function MobileEditLayout(props: EditorLayoutProps) {
     addContactItem, updateContactItem, removeContactItem,
     addListItem, updateListItem, removeListItem, addTagItem, updateTagItem, removeTagItem,
     addBlock, isShareModalOpen, setIsShareModalOpen, blockToDelete, profileToDelete, setIsImportModalOpen, setActiveTab,
-    isPro
+    isPro, isAdmin
   } = props;
   const [iconMenuRect, setIconMenuRect] = useState<DOMRect | null>(null);
 
@@ -327,6 +327,7 @@ export default function MobileEditLayout(props: EditorLayoutProps) {
             renameProfile={renameProfile}
             setProfileToDelete={setProfileToDelete}
             isPro={isPro}
+            isAdmin={isAdmin}
             isCollapsed={isSidebarCollapsed}
           />
 
@@ -368,6 +369,7 @@ export default function MobileEditLayout(props: EditorLayoutProps) {
                   renameProfile={renameProfile}
                   setProfileToDelete={setProfileToDelete}
                   isPro={isPro}
+                  isAdmin={isAdmin}
                   isCollapsed={false}
                 />
               </div>
@@ -733,7 +735,7 @@ export default function MobileEditLayout(props: EditorLayoutProps) {
           >
             <button
               onClick={() => {
-                if (!isPro && Object.keys(appState.profiles).length >= 3) {
+                if (!isPro && !isAdmin && Object.keys(appState.profiles).length >= 3) {
                   alert("You have reached the maximum number of 3 resumes for non-pro users. Please upgrade to Pro or delete an existing resume to import a new one.");
                   return;
                 }

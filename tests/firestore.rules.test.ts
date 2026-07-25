@@ -99,6 +99,27 @@ describe.skip('Firestore Security Rules', () => {
         enableAnimation: true
       }));
     });
+
+    it('allows creation when user has >3 profiles but is users_pro', async () => {
+      // Setup: user with 4 profiles + users_pro doc
+      await testEnv.withSecurityRulesDisabled(async (context) => {
+        await setDoc(doc(context.firestore(), 'users/user_pro'), {
+          profiles: { '1': {}, '2': {}, '3': {}, '4': {} }
+        });
+        await setDoc(doc(context.firestore(), 'users_pro/user_pro'), { status: 'active' });
+      });
+
+      const db = testEnv.authenticatedContext('user_pro').firestore();
+      await assertSucceeds(setDoc(doc(db, 'sharedResumes/resume_pro'), {
+        profile: {},
+        blocks: {},
+        blockOrder: [],
+        createdAt: Date.now(),
+        themeColor: '#fff',
+        enableAnimation: true,
+        isPro: true
+      }));
+    });
   });
 
   describe('liveResumes', () => {
@@ -208,6 +229,25 @@ describe.skip('Firestore Security Rules', () => {
         ownerUid: 'user_admin'
       }));
     });
+
+    it('allows creation when user has >3 profiles but is users_pro', async () => {
+      // Setup: user with 4 profiles + users_pro doc
+      await testEnv.withSecurityRulesDisabled(async (context) => {
+        await setDoc(doc(context.firestore(), 'users/user_pro'), {
+          profiles: { '1': {}, '2': {}, '3': {}, '4': {} }
+        });
+        await setDoc(doc(context.firestore(), 'users_pro/user_pro'), { status: 'active' });
+      });
+
+      const db = testEnv.authenticatedContext('user_pro').firestore();
+      await assertSucceeds(setDoc(doc(db, 'liveResumes/resume_pro'), {
+        profile: {},
+        blocks: {},
+        blockOrder: [],
+        ownerUid: 'user_pro',
+        isPro: true
+      }));
+    });
   });
 
   describe('user_limits', () => {
@@ -258,6 +298,28 @@ describe.skip('Firestore Security Rules', () => {
       // Update with reduced size (3)
       await assertSucceeds(setDoc(doc(db, 'users/user_123/userState/state'), {
         profiles: { '1': {}, '2': {}, '3': {} }
+      }));
+    });
+
+    it('allows write when user has >3 profiles but is admin', async () => {
+      await testEnv.withSecurityRulesDisabled(async (context) => {
+        await setDoc(doc(context.firestore(), 'admins/user_admin'), { role: 'admin' });
+      });
+
+      const db = testEnv.authenticatedContext('user_admin').firestore();
+      await assertSucceeds(setDoc(doc(db, 'users/user_admin/userState/state'), {
+        profiles: { '1': {}, '2': {}, '3': {}, '4': {} }
+      }));
+    });
+
+    it('allows write when user has >3 profiles but is users_pro', async () => {
+      await testEnv.withSecurityRulesDisabled(async (context) => {
+        await setDoc(doc(context.firestore(), 'users_pro/user_pro'), { status: 'active' });
+      });
+
+      const db = testEnv.authenticatedContext('user_pro').firestore();
+      await assertSucceeds(setDoc(doc(db, 'users/user_pro/userState/state'), {
+        profiles: { '1': {}, '2': {}, '3': {}, '4': {} }
       }));
     });
   });

@@ -33,6 +33,7 @@ interface AuthContextType {
   loading: boolean;
   isNewUser: boolean; // Add this flag
   isPro: boolean;
+  isAdmin: boolean;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -44,6 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
   const [isNewUser, setIsNewUser] = useState(false);
   const [isPro, setIsPro] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -70,6 +72,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           const proRef = doc(db, 'users_pro', firebaseUser.uid);
           const proSnap = await getDoc(proRef);
           setIsPro(proSnap.exists());
+
+          // Check if user is an Admin
+          const adminRef = doc(db, 'admins', firebaseUser.uid);
+          const adminSnap = await getDoc(adminRef);
+          setIsAdmin(adminSnap.exists());
         } catch (error: any) {
           console.error("Firebase auth check runtime error:", error);
           if (error.message && error.message.includes('offline')) {
@@ -83,6 +90,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } else {
         setIsNewUser(false);
         setIsPro(false);
+        setIsAdmin(false);
       }
       
       setUser(firebaseUser);
@@ -136,9 +144,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     loading,
     isNewUser,
     isPro,
+    isAdmin,
     signInWithGoogle,
     signOut
-  }), [user, loading, isNewUser, isPro]);
+  }), [user, loading, isNewUser, isPro, isAdmin]);
 
   return (
     <AuthContext.Provider value={value}>

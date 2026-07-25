@@ -11,6 +11,7 @@ interface ProfileSwitcherProps {
   renameProfile: (id: string, name: string) => void;
   setProfileToDelete: (id: string | null) => void;
   isPro?: boolean;
+  isAdmin?: boolean;
 }
 
 const ProfileSwitcher = React.memo(({
@@ -22,6 +23,7 @@ const ProfileSwitcher = React.memo(({
   setProfileToDelete,
   isCollapsed,
   isPro,
+  isAdmin,
 }: ProfileSwitcherProps) => {
   const [editingProfileId, setEditingProfileId] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -73,7 +75,7 @@ const ProfileSwitcher = React.memo(({
           >
             <button
               onClick={() => {
-                if (!isPro && Object.keys(profiles).length >= 3) {
+                if (!isPro && !isAdmin && Object.keys(profiles).length >= 3) {
                   alert("You have reached the maximum number of 3 resumes for non-pro users. Please upgrade to Pro or delete an existing resume to copy.");
                   return;
                 }
