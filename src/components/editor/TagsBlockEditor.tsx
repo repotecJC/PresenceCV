@@ -129,21 +129,40 @@ const TagItemEditor = React.memo(({ provided, snapshot, blockId, item, index, to
   const initialTitle = initialParts[0] || '';
   const initialDesc = initialParts.length > 1 ? initialParts.slice(1).join(':').trim() : '';
 
-  const titleInput = useDebouncedInput(initialTitle, (newTitle) => {
-    const currentDesc = descInput.ref.current?.value || '';
-    const combined = currentDesc.trim() ? `${newTitle.trim()}: ${currentDesc.trim()}` : newTitle.trim();
-    if (combined !== item.text) {
-      updateTagItem(blockId, item.id, combined);
-    }
-  }, 500);
+  const tags = initialDesc ? initialDesc.split(/[,，、]\s*(?![^()]*\))/).map(s => s.trim()).filter(Boolean) : [];
 
-  const descInput = useDebouncedInput(initialDesc, (newDesc) => {
-    const currentTitle = titleInput.ref.current?.value || '';
-    const combined = newDesc.trim() ? `${currentTitle.trim()}: ${newDesc.trim()}` : currentTitle.trim();
+  const titleInput = useDebouncedInput(initialTitle, (newTitle) => {
+    const combined = tags.length ? `${newTitle.trim()}: ${tags.join(', ')}` : newTitle.trim();
     if (combined !== item.text) {
       updateTagItem(blockId, item.id, combined);
     }
   }, 500);
+  const [inputValue, setInputValue] = useState('');
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const val = inputValue.trim();
+      if (val) {
+        const newTags = [...tags, val];
+        const currentTitle = titleInput.ref.current?.value || initialTitle;
+        updateTagItem(blockId, item.id, newTags.length ? `${currentTitle.trim()}: ${newTags.join(', ')}` : currentTitle.trim());
+        setInputValue('');
+      }
+    } else if (e.key === 'Backspace' && inputValue === '') {
+      if (tags.length > 0) {
+        const newTags = tags.slice(0, -1);
+        const currentTitle = titleInput.ref.current?.value || initialTitle;
+        updateTagItem(blockId, item.id, newTags.length ? `${currentTitle.trim()}: ${newTags.join(', ')}` : currentTitle.trim());
+      }
+    }
+  };
+
+  const removeTag = (indexToRemove: number) => {
+    const newTags = tags.filter((_, i) => i !== indexToRemove);
+    const currentTitle = titleInput.ref.current?.value || initialTitle;
+    updateTagItem(blockId, item.id, newTags.length ? `${currentTitle.trim()}: ${newTags.join(', ')}` : currentTitle.trim());
+  };
 
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
@@ -199,14 +218,26 @@ const TagItemEditor = React.memo(({ provided, snapshot, blockId, item, index, to
           placeholder={t('editor.tagsBlock.category')}
           className="bg-transparent border-b border-[#eceae4] hover:border-[#1c1c1c]/20 focus:border-accent outline-none text-base font-medium tracking-wide text-[#1c1c1c] transition-colors pb-1 w-full"
         />
-        <input
-          ref={descInput.ref as React.Ref<HTMLInputElement>}
-          defaultValue={descInput.defaultValue}
-          onChange={descInput.onChange}
-          onBlur={descInput.onBlur}
-          placeholder={t('editor.tagsBlock.tags')}
-          className="bg-transparent border-b border-[#eceae4] hover:border-[#1c1c1c]/20 focus:border-accent outline-none text-base tracking-wide text-[#5f5f5d] transition-colors pb-1 w-full"
-        />
+        <div className="border-b border-[#eceae4] hover:border-[#1c1c1c]/20 focus-within:border-accent transition-colors pb-1 w-full flex flex-wrap gap-1.5 items-center cursor-text" onClick={(e) => {
+          const input = e.currentTarget.querySelector('input');
+          if (input) input.focus();
+        }}>
+          {tags.map((tag, i) => (
+             <span key={i} className="px-3 py-0.5 bg-white border border-[#eceae4] rounded-full text-sm tracking-wide text-[#5f5f5d] flex items-center gap-1 group/pill">
+               {tag}
+               <button type="button" onClick={(e) => { e.stopPropagation(); removeTag(i); }} className="opacity-0 group-hover/pill:opacity-100 hover:text-red-500 transition-opacity">
+                  <LucideIcons.X className="w-3 h-3" />
+               </button>
+             </span>
+          ))}
+          <input
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder={tags.length === 0 ? t('editor.tagsBlock.tags') : ''}
+            className="bg-transparent outline-none text-base tracking-wide text-[#5f5f5d] flex-1 min-w-[60px] p-0 m-0"
+          />
+        </div>
       </div>
 
       {isConfirmingDelete ? (

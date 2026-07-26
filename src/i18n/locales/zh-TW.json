@@ -52,8 +52,8 @@
     "tagsBlock": {
       "category": "技能類別名稱",
       "categoryPlaceholder": "例如：程式語言",
-      "tags": "技能標籤 (以逗號分隔)",
-      "tagsPlaceholder": "例如：TypeScript, React, Node.js",
+      "tags": "技能標籤 (按下 Enter 新增)",
+      "tagsPlaceholder": "例如：TypeScript (按 Enter)",
       "addCategory": "新增技能類別",
       "deleteCategory": "刪除類別"
     },

@@ -410,7 +410,7 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
                         <h4 className="text-sm font-bold tracking-widest mb-3 text-gray-900">{category}</h4>
                         <div className="flex flex-wrap gap-2">
                           {tags.map((t, i) => (
-                            <span key={i} className="px-3 py-1 bg-white border rounded-lg text-xs text-gray-600 block">
+                            <span key={i} className="px-3 py-1 bg-white border rounded-full text-xs text-gray-600 block">
                               {t}
                             </span>
                           ))}
@@ -662,7 +662,7 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
                           {tags.map((t, i) => (
                             <span 
                               key={i} 
-                              className="px-4 py-2 xl:px-0 xl:py-1 xl:bg-transparent bg-black/5 rounded-lg xl:rounded-none text-xs xl:text-sm text-[#5f5f5d] xl:border-none border border-transparent hover:text-accent hover:bg-black/10 xl:hover:bg-transparent xl:hover:translate-x-2 transition-all flex items-center w-auto xl:w-full"
+                              className="px-4 py-2 xl:px-0 xl:py-1 xl:bg-transparent bg-black/5 rounded-full xl:rounded-none text-xs xl:text-sm text-[#5f5f5d] xl:border-none border border-transparent hover:text-accent hover:bg-black/10 xl:hover:bg-transparent xl:hover:translate-x-2 transition-all flex items-center w-auto xl:w-full"
                             >
                               <span className="hidden xl:inline-block w-1 h-1 bg-[#eceae4] rounded-full mr-3.5 flex-shrink-0" />
                               {t}

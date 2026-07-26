@@ -52,8 +52,8 @@
     "tagsBlock": {
       "category": "Category Name",
       "categoryPlaceholder": "e.g. Programming Languages",
-      "tags": "Skills / Tags (comma separated)",
-      "tagsPlaceholder": "e.g. TypeScript, React, Node.js",
+      "tags": "Skills / Tags (Press Enter to add)",
+      "tagsPlaceholder": "e.g. TypeScript (press Enter)",
       "addCategory": "Add Skill Category",
       "deleteCategory": "Delete Category"
     },
