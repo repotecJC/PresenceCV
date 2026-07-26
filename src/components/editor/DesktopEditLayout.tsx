@@ -1,5 +1,6 @@
 import React, { CSSProperties, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import { Droppable, Draggable } from '@hello-pangea/dnd';
 import { Link } from 'react-router-dom';
 import * as LucideIcons from 'lucide-react';
@@ -8,6 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ICONS, AVAILABLE_BLOCK_ICONS, THEME_COLORS, AVAILABLE_ICONS } from '../../constants';
 import ProfileSwitcher from './ProfileSwitcher';
 import ThemePicker from './ThemePicker';
+import LanguageSwitcher from '../LanguageSwitcher';
 import PhotoUploadCrop from './PhotoUploadCrop';
 import InfoEditor from './InfoEditor';
 import ListBlockEditor from './ListBlockEditor';
@@ -29,6 +31,7 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
     addBlock, isShareModalOpen, setIsShareModalOpen, blockToDelete, profileToDelete, setIsImportModalOpen, setActiveTab,
     isPro, isAdmin
   } = props;
+  const { t } = useTranslation();
   const [iconMenuRect, setIconMenuRect] = useState<DOMRect | null>(null);
 
   const activeBlock = data.blocks[activeTab];
@@ -71,9 +74,9 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
               </button>
 
               <LucideIcons.Share2 className="w-10 h-10 text-accent mb-4" />
-              <h3 className="text-2xl text-[#1c1c1c] mb-2">Share Your Resume</h3>
+              <h3 className="text-2xl text-[#1c1c1c] mb-2">{t('common.shareResume')}</h3>
               <p className="text-sm text-[#5f5f5d] mb-8">
-                Choose how you want to share your profile with the world.
+                {t('common.shareResumeDesc')}
               </p>
 
               <div className="flex flex-col gap-5 w-full">
@@ -81,17 +84,17 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 text-[#1c1c1c] font-medium">
                       <LucideIcons.Camera className="w-4 h-4 text-accent" />
-                      Snapshot Link
+                      {t('common.snapshotLink')}
                     </div>
                   </div>
                   <p className="text-xs text-[#5f5f5d]">
-                    Captures your resume exactly as it is right now. Automatically updates only when you make changes.
+                    {t('common.snapshotLinkDesc')}
                   </p>
                   <div className="flex items-center gap-2 mt-1">
                     {isSharing ? (
                       <div className="flex-1 flex items-center gap-2 text-xs text-[#5f5f5d] bg-white border border-[#eceae4] rounded-lg px-3 py-2">
                         <LucideIcons.Loader2 className="w-3 h-3 animate-spin shrink-0" />
-                        Generating…
+                        {t('common.generating')}
                       </div>
                     ) : snapshotUrl ? (
                       <input
@@ -102,7 +105,7 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
                       />
                     ) : (
                       <div className="flex-1 text-xs text-red-400 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
-                        Failed to generate. Close and reopen to retry.
+                        {t('common.generateFailed')}
                       </div>
                     )}
                     <button
@@ -111,8 +114,8 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
                       className="shrink-0 flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium bg-[#eceae4] hover:bg-[#dcdbd7] disabled:opacity-40 transition-colors"
                     >
                       {copiedSection === 'snapshot'
-                        ? <><LucideIcons.Check className="w-3 h-3 text-green-600" /> Copied!</>
-                        : <><LucideIcons.Copy className="w-3 h-3" /> Copy</>}
+                        ? <><LucideIcons.Check className="w-3 h-3 text-green-600" /> {t('common.copied')}</>
+                        : <><LucideIcons.Copy className="w-3 h-3" /> {t('common.copy')}</>}
                     </button>
                   </div>
                 </div>
@@ -120,21 +123,21 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
                 <div className="flex flex-col gap-2 w-full text-left p-4 rounded-xl border border-accent/20 bg-accent/5">
                   <div className="flex items-center gap-2 text-[#1c1c1c] font-medium">
                     <LucideIcons.Radio className="w-4 h-4 text-accent" />
-                    Live Link
+                    {t('common.liveLink')}
                     {data.liveId && (
                       <span className="ml-auto text-[10px] tracking-widest text-green-600 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full">
-                        Active
+                        {t('common.active')}
                       </span>
                     )}
                   </div>
                   <p className="text-xs text-[#5f5f5d]">
-                    A permanent link that always reflects your latest edits. Tied to this profile — deleting the profile removes the link.
+                    {t('common.liveLinkDesc')}
                   </p>
                   <div className="flex items-center gap-2 mt-1">
                     {isInitializingLive ? (
                       <div className="flex-1 flex items-center gap-2 text-xs text-[#5f5f5d] bg-white border border-[#eceae4] rounded-lg px-3 py-2">
                         <LucideIcons.Loader2 className="w-3 h-3 animate-spin shrink-0" />
-                        Creating live link…
+                        {t('common.creatingLiveLink')}
                       </div>
                     ) : data.liveId ? (
                       <input
@@ -149,7 +152,7 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
                         className="flex-1 flex items-center justify-center gap-2 text-xs text-accent bg-accent/10 border border-accent/20 rounded-lg px-3 py-2 hover:bg-accent/20 transition-colors"
                       >
                         <LucideIcons.Plus className="w-3 h-3" />
-                        Create Live Link for this profile
+                        {t('common.createLiveLink')}
                       </button>
                     )}
                     {data.liveId && (
@@ -158,8 +161,8 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
                         className="shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium bg-[#eceae4] text-[#1c1c1c] hover:bg-[#dcdbd7] transition-colors"
                       >
                         {copiedSection === 'live'
-                          ? <><LucideIcons.Check className="w-3 h-3 text-green-600" /> Copied!</>
-                          : <><LucideIcons.Copy className="w-3 h-3" /> Copy</>}
+                          ? <><LucideIcons.Check className="w-3 h-3 text-green-600" /> {t('common.copied')}</>
+                          : <><LucideIcons.Copy className="w-3 h-3" /> {t('common.copy')}</>}
                       </button>
                     )}
                   </div>
@@ -168,10 +171,10 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
                 <div className="flex flex-col gap-2 w-full text-left p-4 rounded-xl border border-[#eceae4] bg-[#f9f8f5]">
                   <div className="flex items-center gap-2 text-[#1c1c1c] font-medium">
                     <LucideIcons.Download className="w-4 h-4 text-accent" />
-                    Export PDF
+                    {t('common.exportPdf')}
                   </div>
                   <p className="text-xs text-[#5f5f5d]">
-                    Generate and download a high-quality PDF version of your resume.
+                    {t('common.exportPdfDesc')}
                   </p>
                   <div className="flex items-center gap-2 mt-1">
                     <button
@@ -179,7 +182,7 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
                       className="flex-1 flex items-center justify-center gap-2 text-xs text-[#1c1c1c] bg-[#eceae4] border border-[#eceae4] rounded-lg px-3 py-2 hover:bg-[#dcdbd7] transition-colors"
                     >
                       <LucideIcons.Download className="w-3 h-3" />
-                      Generate PDF
+                      {t('common.generatePdf')}
                     </button>
                   </div>
                 </div>
@@ -196,16 +199,16 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
               className="bg-white p-8 rounded-2xl max-w-md w-full flex flex-col items-center text-center border border-[#eceae4] shadow-xl"
             >
               <LucideIcons.AlertTriangle className="w-12 h-12 text-red-500 mb-4" />
-              <h3 className="text-xl font-medium text-[#1c1c1c] mb-2">Delete Section?</h3>
+              <h3 className="text-xl font-medium text-[#1c1c1c] mb-2">{t('common.deleteSectionTitle')}</h3>
               <p className="text-sm text-[#5f5f5d] mb-8">
-                Are you sure you want to delete "{data.blocks[blockToDelete]?.title}"? This action cannot be undone.
+                {t('common.deleteSectionDesc', { title: data.blocks[blockToDelete]?.title })}
               </p>
               <div className="flex gap-4 w-full">
                 <button
                   onClick={() => setBlockToDelete(null)}
                   className="flex-1 py-3 rounded-xl bg-[#f7f4ed] hover:bg-[#eceae4] transition-colors text-[#1c1c1c] font-medium"
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </button>
                 <button
                   onClick={() => {
@@ -215,7 +218,7 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
                   }}
                   className="flex-1 py-3 rounded-xl bg-red-500 hover:bg-red-600 transition-colors text-white font-medium"
                 >
-                  Confirm
+                  {t('common.confirm')}
                 </button>
               </div>
             </motion.div>
@@ -232,31 +235,31 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
               <LucideIcons.FileWarning className="w-12 h-12 text-red-500 mb-4" />
               {Object.keys(appState.profiles).length <= 1 ? (
                 <>
-                  <h3 className="text-xl font-medium text-[#1c1c1c] mb-2">Unable to delete the profile</h3>
+                  <h3 className="text-xl font-medium text-[#1c1c1c] mb-2">{t('common.unableToDeleteProfileTitle')}</h3>
                   <p className="text-sm text-[#5f5f5d] mb-8">
-                    At least one profile must be retained
+                    {t('common.unableToDeleteProfileDesc')}
                   </p>
                   <div className="flex gap-4 w-full">
                     <button
                       onClick={() => setProfileToDelete(null)}
                       className="flex-1 py-3 rounded-xl bg-[#f7f4ed] hover:bg-[#eceae4] transition-colors text-[#1c1c1c] font-medium"
                     >
-                      Okay
+                      {t('common.okay')}
                     </button>
                   </div>
                 </>
               ) : (
                 <>
-                  <h3 className="text-xl font-medium text-[#1c1c1c] mb-2">Delete Resume?</h3>
+                  <h3 className="text-xl font-medium text-[#1c1c1c] mb-2">{t('common.deleteResumeTitle')}</h3>
                   <p className="text-sm text-[#5f5f5d] mb-8">
-                    Are you sure you want to delete "{appState.profiles[profileToDelete]?.name}"? This action cannot be undone.
+                    {t('common.deleteResumeDesc', { name: appState.profiles[profileToDelete]?.name })}
                   </p>
                   <div className="flex gap-4 w-full">
                     <button
                       onClick={() => setProfileToDelete(null)}
                       className="flex-1 py-3 rounded-xl bg-[#f7f4ed] hover:bg-[#eceae4] transition-colors text-[#1c1c1c] font-medium"
                     >
-                      Cancel
+                      {t('common.cancel')}
                     </button>
                     <button
                       onClick={() => {
@@ -265,7 +268,7 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
                       }}
                       className="flex-1 py-3 rounded-xl bg-red-500 hover:bg-red-600 transition-colors text-white font-medium"
                     >
-                      Confirm
+                      {t('common.confirm')}
                     </button>
                   </div>
                 </>
@@ -314,7 +317,7 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
                </div>
              )}
              <div className={`flex-1 min-w-0 ${isSidebarCollapsed ? 'hidden' : 'hidden lg:block'}`}>
-               <div className="text-xs text-[#5f5f5d] font-medium truncate">{user?.email || 'User'}</div>
+               <div className="text-xs text-[#5f5f5d] font-medium truncate">{user?.email || t('common.user')}</div>
              </div>
              
              {/* Log Out Buttons */}
@@ -332,6 +335,10 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
              >
                <LucideIcons.LogOut className="w-4 h-4" />
              </button>
+          </div>
+          
+          <div className="mt-2 w-full">
+            <LanguageSwitcher isCollapsed={isSidebarCollapsed} />
           </div>
 
           <div className="w-full h-px bg-[#eceae4] my-2 shrink-0 hidden lg:block" />
@@ -365,7 +372,7 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
           >
             <div className="flex items-center gap-3">
               <LucideIcons.Share2 className="w-4 h-4 text-accent shrink-0 lg:w-4 lg:h-4" />
-              <span className={`text-sm tracking-widest font-medium ${isSidebarCollapsed ? 'hidden' : 'hidden lg:block'}`}>Share</span>
+              <span className={`text-sm tracking-widest font-medium ${isSidebarCollapsed ? 'hidden' : 'hidden lg:block'}`}>{t('editor.sidebar.share')}</span>
             </div>
           </button>
         </div>
@@ -438,7 +445,7 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
                        );
                      })()}
                      {activeTab === 'info' ? (
-                       <span className="text-sm tracking-widest truncate flex-1 text-left">Info</span>
+                       <span className="text-sm tracking-widest truncate flex-1 text-left">{t('editor.tabs.info')}</span>
                      ) : (
                        <input 
                          value={data.blocks[activeTab]?.title || ''}
@@ -474,7 +481,7 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
                          className={`flex items-center gap-3 px-4 py-3 rounded-2xl transition-all ${activeTab === 'info' ? 'bg-[#f7f4ed] text-[#1c1c1c]' : 'text-[#5f5f5d] hover:bg-black/5 hover:text-[#1c1c1c]'}`}
                        >
                          <LucideIcons.User className="w-4 h-4" />
-                         <span className="text-sm tracking-widest font-medium">Info</span>
+                         <span className="text-sm tracking-widest font-medium">{t('editor.tabs.info')}</span>
                        </button>
                        {data.blockOrder.map(blockId => {
                          const block = data.blocks[blockId];
@@ -533,7 +540,7 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
                   }`}
                 >
                   <LucideIcons.User className="w-4 h-4" />
-                  <span className="text-sm tracking-widest">Info</span>
+                  <span className="text-sm tracking-widest">{t('editor.tabs.info')}</span>
                 </button>
 
                 <Droppable droppableId="tabs" direction="horizontal" type="tabs">
@@ -664,7 +671,7 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
                 }}
                 className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-[10px] sm:text-xs tracking-widest text-text-secondary hover:text-accent hover:bg-white/5 transition-colors  whitespace-nowrap ${isMobile ? 'flex-1 border border-white/10 bg-white/5' : ''}`}
               >
-                <LucideIcons.Plus className="w-3 h-3" /> List View
+                <LucideIcons.Plus className="w-3 h-3" /> {t("editor.layout.listView")}
               </button>
               <button
                 onClick={() => {
@@ -674,7 +681,7 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
                 }}
                 className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-[10px] sm:text-xs tracking-widest text-text-secondary hover:text-accent hover:bg-white/5 transition-colors  whitespace-nowrap ${isMobile ? 'flex-1 border border-white/10 bg-white/5' : ''}`}
               >
-                <LucideIcons.Plus className="w-3 h-3" /> Tag View
+                <LucideIcons.Plus className="w-3 h-3" /> {t("editor.layout.tagView")}
               </button>
             </div>
           </div>
@@ -687,20 +694,21 @@ export default function DesktopEditLayout(props: EditorLayoutProps) {
             <button
               onClick={() => {
                 if (!isPro && !isAdmin && Object.keys(appState.profiles).length >= 3) {
-                  alert("You have reached the maximum number of 3 resumes for non-pro users. Please upgrade to Pro or delete an existing resume to import a new one.");
-                  return;
+                  alert(t('editor.alerts.limitReached'));
+                } else {
+                  setIsImportModalOpen(true);
                 }
-                setIsImportModalOpen(true);
               }}
               className="bg-white px-6 py-3 rounded-full flex items-center justify-center gap-2 text-xs md:text-sm tracking-widest hover:bg-[#eceae4] transition-colors text-[#1c1c1c] border border-[#eceae4] shadow-sm whitespace-nowrap"
             >
-              <LucideIcons.Upload className="w-4 h-4 text-accent" /> Upload Resume
+              <LucideIcons.Upload className="w-4 h-4 text-accent" /> {t("editor.layout.uploadResume")}
             </button>
             <Link
               to="/view"
+              target="_blank"
               className="bg-white px-6 py-3 rounded-full flex items-center justify-center gap-2 text-xs md:text-sm tracking-widest hover:bg-[#eceae4] transition-colors text-[#1c1c1c] border border-[#eceae4] shadow-sm whitespace-nowrap"
             >
-              <LucideIcons.Eye className="w-4 h-4 text-accent" /> Profile Preview
+              <LucideIcons.Eye className="w-4 h-4 text-accent" /> {t("editor.layout.profilePreview")}
             </Link>
           </div>
         </div>

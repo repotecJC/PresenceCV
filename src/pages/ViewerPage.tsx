@@ -34,6 +34,8 @@
 import { CSSProperties, useState, useEffect, useRef } from 'react';
 import { useLocation, Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import * as LucideIcons from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 import { motion, AnimatePresence } from 'motion/react';
 
 import { useResume } from '../hooks/useResume';
@@ -51,6 +53,7 @@ const ICONS: Record<string, any> = {
 };
 
 export default function ViewerPage({ testData }: { testData?: unknown }) {
+  const { t } = useTranslation();
   const { data: defaultData } = useResume();
   const [searchParams] = useSearchParams();
   const [remoteData, setRemoteData] = useState<ResumeData | null>(null);
@@ -72,16 +75,16 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
           if (docSnap.exists()) {
             setRemoteData(docSnap.data() as ResumeData);
           } else {
-            setError('Resume not found.');
+            setError(t('viewer.errors.notFound'));
           }
         } catch (err: any) {
           console.error(err);
           if (err && typeof err === 'object' && 'code' in err && (err as {code: string}).code === 'permission-denied') {
-            setError('Permission denied.');
+            setError(t('viewer.errors.permissionDenied'));
           } else if (err.message && err.message.includes('offline')) {
-            setError('Unable to reach the server. Please check your internet connection or the application configuration.');
+            setError(t('viewer.errors.offline'));
           } else {
-            setError('Failed to load resume. Please verify the link.');
+            setError(t('viewer.errors.invalidLink'));
           }
         } finally {
           setLoading(false);
@@ -248,7 +251,7 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
          <div className="flex flex-col items-center gap-4 relative z-10">
            <span className="w-12 h-12 rounded-full border-4 border-white/10 border-t-white animate-spin mb-4" />
            <p className="text-xl tracking-widest font-light text-text-secondary">
-             {isSyncPrintWait ? 'Preparing Document...' : 'Loading Profile...'}
+             {isSyncPrintWait ? t('viewer.loading.print') : t('viewer.loading.profile')}
            </p>
          </div>
       </div>
@@ -261,10 +264,10 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
          <div className="depth-bg animated" />
          <div className="flex flex-col items-center gap-4 relative z-10 text-center max-w-md px-6">
            <LucideIcons.AlertTriangle className="w-16 h-16 text-red-500 mb-2" />
-           <p className="text-xl tracking-widest font-light text-white mb-2">Error</p>
+           <p className="text-xl tracking-widest font-light text-white mb-2">{t('common.error')}</p>
            <p className="text-text-secondary">{error}</p>
            <Link to="/edit" className="mt-8 px-8 py-3 rounded-full border border-white/10 text-white hover:bg-white/10 transition-colors tracking-widest text-sm">
-             Go to Editor
+             {t('viewer.goToEditor')}
            </Link>
          </div>
       </div>
@@ -282,7 +285,7 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
           <div className="print-watermark">
             <a href={window.location.origin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5">
               <img src="/favicon.png" className="w-4 h-4 rounded-full" alt="PresenceCV Logo" />
-              Built with PresenceCV
+              {t('viewer.watermark')}
             </a>
           </div>
         )}
@@ -460,7 +463,7 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
         >
           {allTabs.map((blockId) => {
             const isInfo = blockId === 'info';
-            const block = isInfo ? { id: 'info', title: 'Info', type: 'info', items: [] } : data.blocks[blockId];
+            const block = isInfo ? { id: 'info', title: t('editor.tabs.info'), type: 'info', items: [] } : data.blocks[blockId];
             if (!block) return null;
             const Icon = !(block as any).icon ? null : ((block as any).icon ? (LucideIcons as any)[(block as any).icon] || LucideIcons.Briefcase : ICONS[blockId] || LucideIcons.Briefcase);
             const isActive = activeTab === blockId;
@@ -483,7 +486,8 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
           })}
         </div>
 
-        <div className="flex-1 flex justify-end w-full xl:w-auto">
+        <div className="flex-1 flex justify-end items-center gap-4 w-full xl:w-auto">
+          {isShared && <LanguageSwitcher fullWidth={false} />}
           {isShared ? (
             <button
               onClick={() => {
@@ -492,14 +496,14 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
               }}
               className="bg-white px-6 py-3 rounded-full flex items-center justify-center gap-2 text-sm tracking-widest hover:bg-[#eceae4] transition-colors text-[#1c1c1c] border border-[#eceae4] shadow-sm hover:text-accent whitespace-nowrap"
             >
-              <LucideIcons.Download className="w-4 h-4" /> Export PDF
+              <LucideIcons.Download className="w-4 h-4" /> {t('viewer.exportPdf')}
             </button>
           ) : (
             <Link
               to="/edit"
               className="bg-white px-6 py-3 rounded-full flex items-center justify-center gap-2 text-sm tracking-widest hover:bg-[#eceae4] transition-colors text-[#1c1c1c] border border-[#eceae4] shadow-sm hover:text-accent  whitespace-nowrap"
             >
-              <LucideIcons.Edit2 className="w-4 h-4" /> Edit Profile
+              <LucideIcons.Edit2 className="w-4 h-4" /> {t('viewer.editResume')}
             </Link>
           )}
         </div>
