@@ -129,10 +129,10 @@ const TagItemEditor = React.memo(({ provided, snapshot, blockId, item, index, to
   const initialTitle = initialParts[0] || '';
   const initialDesc = initialParts.length > 1 ? initialParts.slice(1).join(':').trim() : '';
 
-  const tags = initialDesc ? initialDesc.split(/[,，、]\s*(?![^()]*\))/).map(s => s.trim()).filter(Boolean) : [];
+  const tags = initialDesc ? initialDesc.split('\n').map(s => s.trim()).filter(Boolean) : [];
 
   const titleInput = useDebouncedInput(initialTitle, (newTitle) => {
-    const combined = tags.length ? `${newTitle.trim()}: ${tags.join(', ')}` : newTitle.trim();
+    const combined = tags.length ? `${newTitle.trim()}:\n${tags.join('\n')}` : newTitle.trim();
     if (combined !== item.text) {
       updateTagItem(blockId, item.id, combined);
     }
@@ -146,14 +146,14 @@ const TagItemEditor = React.memo(({ provided, snapshot, blockId, item, index, to
       if (val) {
         const newTags = [...tags, val];
         const currentTitle = titleInput.ref.current?.value || initialTitle;
-        updateTagItem(blockId, item.id, newTags.length ? `${currentTitle.trim()}: ${newTags.join(', ')}` : currentTitle.trim());
+        updateTagItem(blockId, item.id, newTags.length ? `${currentTitle.trim()}:\n${newTags.join('\n')}` : currentTitle.trim());
         setInputValue('');
       }
     } else if (e.key === 'Backspace' && inputValue === '') {
       if (tags.length > 0) {
         const newTags = tags.slice(0, -1);
         const currentTitle = titleInput.ref.current?.value || initialTitle;
-        updateTagItem(blockId, item.id, newTags.length ? `${currentTitle.trim()}: ${newTags.join(', ')}` : currentTitle.trim());
+        updateTagItem(blockId, item.id, newTags.length ? `${currentTitle.trim()}:\n${newTags.join('\n')}` : currentTitle.trim());
       }
     }
   };
@@ -161,7 +161,7 @@ const TagItemEditor = React.memo(({ provided, snapshot, blockId, item, index, to
   const removeTag = (indexToRemove: number) => {
     const newTags = tags.filter((_, i) => i !== indexToRemove);
     const currentTitle = titleInput.ref.current?.value || initialTitle;
-    updateTagItem(blockId, item.id, newTags.length ? `${currentTitle.trim()}: ${newTags.join(', ')}` : currentTitle.trim());
+    updateTagItem(blockId, item.id, newTags.length ? `${currentTitle.trim()}:\n${newTags.join('\n')}` : currentTitle.trim());
   };
 
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);

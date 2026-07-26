@@ -396,10 +396,10 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
                     let tags: string[];
                     if (idx > -1) {
                       category = item.text.slice(0, idx).trim();
-                      tags = item.text.slice(idx + 1).split(/[,，、]\s*(?![^()]*\))/).map(s => s?.trim()).filter(Boolean);
-                    } else if (item.text.match(/[,，、]/)) {
+                      tags = item.text.slice(idx + 1).split('\n').map(s => s?.trim()).filter(Boolean);
+                    } else if (item.text.includes('\n')) {
                       category = 'Skills';
-                      tags = item.text.split(/[,，、]\s*(?![^()]*\))/).map(s => s?.trim()).filter(Boolean);
+                      tags = item.text.split('\n').map(s => s?.trim()).filter(Boolean);
                     } else {
                       tags = [item.text];
                       category = 'Expertise';
@@ -640,10 +640,10 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
                     
                     if (idx > -1) {
                       category = item.text.slice(0, idx).trim();
-                      tags = item.text.slice(idx + 1).split(/[,，、]\s*(?![^()]*\))/).map(s => s?.trim()).filter(Boolean);
-                    } else if (item.text.match(/[,，、]/)) {
+                      tags = item.text.slice(idx + 1).split('\n').map(s => s?.trim()).filter(Boolean);
+                    } else if (item.text.includes('\n')) {
                       category = 'Skills';
-                      tags = item.text.split(/[,，、]\s*(?![^()]*\))/).map(s => s?.trim()).filter(Boolean);
+                      tags = item.text.split('\n').map(s => s?.trim()).filter(Boolean);
                     } else {
                       tags = [item.text];
                       category = 'Expertise';
