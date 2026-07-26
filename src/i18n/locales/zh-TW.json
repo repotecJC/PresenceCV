@@ -1,0 +1,317 @@
+{
+  "editor": {
+    "sections": {
+      "info": "個人資訊",
+      "experience": "工作經歷",
+      "education": "學歷背景",
+      "skills": "專業技能",
+      "languages": "語言能力"
+    },
+    "info": {
+      "fullName": "姓名",
+      "fullNamePlaceholder": "例如：陳大明",
+      "jobTitle": "職稱 / 頭銜",
+      "jobTitlePlaceholder": "例如：資深前端工程師",
+      "email": "電子郵件",
+      "emailPlaceholder": "例如：alex@example.com",
+      "phone": "聯絡電話",
+      "phonePlaceholder": "例如：+886 912 345 678",
+      "location": "所在地區",
+      "locationPlaceholder": "例如：台北市，台灣",
+      "website": "個人網站 / 作品集",
+      "websitePlaceholder": "例如：https://alexchen.dev",
+      "summary": "個人簡介 / 簡述",
+      "summaryPlaceholder": "簡短介紹您的專業背景、核心技能與個人優勢...",
+      "rewriteWithAi": "AI 潤飾優化",
+      "aiSuggestionTitle": "AI 建議的個人簡介",
+      "applyAiSuggestion": "套用此建議",
+      "recommendedLength": "建議長度：250-400",
+      "chars": "字元",
+      "summaryLength": {
+        "empty": "請輸入個人簡介",
+        "tooShort": "內容過短",
+        "aBitShort": "長度偏短",
+        "optimal": "長度適中",
+        "aBitLong": "長度偏長",
+        "tooLong": "內容過長"
+      }
+    },
+    "listBlock": {
+      "roleTitle": "職稱 / 身份",
+      "roleTitlePlaceholder": "例如：資深軟體工程師",
+      "subtitle": "公司 / 單位機構",
+      "subtitlePlaceholder": "例如： Google 台灣",
+      "dateRange": "起訖時間",
+      "dateRangePlaceholder": "例如：2021 - 至今",
+      "description": "職責描述 / 主要成就",
+      "descriptionPlaceholder": "描述您的工作職責、專案成就與具體貢獻...",
+      "addItem": "新增項目",
+      "deleteItem": "刪除項目",
+      "maxItemsWarning": "超過 4 個項目可能會導致 PDF 文字過小。"
+    },
+    "tagsBlock": {
+      "category": "技能類別名稱",
+      "categoryPlaceholder": "例如：程式語言",
+      "tags": "技能標籤 (以逗號分隔)",
+      "tagsPlaceholder": "例如：TypeScript, React, Node.js",
+      "addCategory": "新增技能類別",
+      "deleteCategory": "刪除類別"
+    },
+    "profileSwitcher": {
+      "switchResume": "切換履歷",
+      "createNew": "複製目前的履歷",
+      "rename": "重新命名",
+      "delete": "刪除履歷",
+      "limitReached": "已達履歷數量上限 (免費版最多 3 份)",
+      "newProfileName": "履歷副本",
+      "renameTitle": "重新命名履歷",
+      "createTitle": "建立新履歷",
+      "defaultName": "履歷"
+    },
+    "photoCrop": {
+      "uploadPhoto": "上傳照片",
+      "changePhoto": "更換照片",
+      "removePhoto": "移除照片",
+      "cropTitle": "裁切個人照片",
+      "save": "儲存照片"
+    },
+    "layout": {
+      "themes": "主題顏色",
+      "uploadResume": "上傳履歷",
+      "profilePreview": "履歷預覽",
+      "addListView": "新增列表",
+      "addTagView": "新增標籤",
+      "listView": "列表",
+      "tagView": "標籤"
+    },
+    "sidebar": {
+      "share": "分享"
+    },
+    "tabs": {
+      "info": "資訊"
+    },
+    "loadingProfiles": "載入您的履歷中...",
+    "alerts": {
+      "limitReached": "非 Pro 用戶最多只能建立 3 份履歷。請升級為 Pro 或刪除現有履歷才能匯入新履歷。",
+      "allowPopups": "請允許彈出視窗以產生 PDF。",
+      "unsupportedFormat": "僅支援 JPG, PNG 和 HEIF 格式。"
+    }
+  },
+  "common": {
+    "logout": "登出",
+    "logoutModal": {
+      "title": "確認登出",
+      "ready": "準備好要離開了嗎？",
+      "desc": "您即將登出您的帳號，未來需要重新登入才能存取您的履歷。",
+      "cancel": "取消",
+      "confirm": "登出"
+    },
+    "cancel": "取消",
+    "confirm": "確認",
+    "okay": "確定",
+    "deleteSectionTitle": "刪除區塊？",
+    "deleteSectionDesc": "確定要刪除「{{title}}」嗎？此動作無法復原。",
+    "unableToDeleteProfileTitle": "無法刪除履歷",
+    "unableToDeleteProfileDesc": "必須保留至少一份履歷。",
+    "deleteResumeTitle": "刪除履歷？",
+    "deleteResumeDesc": "確定要刪除「{{name}}」嗎？此動作無法復原。",
+    "shareResume": "分享您的履歷",
+    "shareResumeDesc": "選擇您希望如何與世界分享您的履歷。",
+    "snapshotLink": "快照連結",
+    "snapshotLinkDesc": "捕捉您目前的履歷狀態。只有在您手動更新時才會變更。",
+    "generating": "產生中…",
+    "generateFailed": "產生失敗，請關閉後重試。",
+    "copied": "已複製！",
+    "copy": "複製",
+    "liveLink": "即時連結",
+    "active": "使用中",
+    "liveLinkDesc": "一個永遠反映您最新編輯內容的永久連結。與此履歷綁定 — 刪除履歷將同時移除此連結。",
+    "creatingLiveLink": "建立即時連結中…",
+    "createLiveLink": "為此履歷建立即時連結",
+    "exportPdf": "匯出 PDF",
+    "exportPdfDesc": "產生並下載高畫質的 PDF 履歷版本。",
+    "generatePdf": "產生 PDF",
+    "user": "使用者",
+    "error": "發生錯誤",
+    "errorBoundary": {
+      "title": "發生未知的錯誤",
+      "tryAgain": "重試"
+    }
+  },
+  "importModal": {
+    "title": "使用 AI 匯入履歷",
+    "subtitle": "上傳現有的 PDF 或 DOCX 檔案，透過 AI 自動解析並填入您的履歷資料。",
+    "dropzoneText": "拖曳檔案至此，或點擊選擇檔案",
+    "supportedFormats": "支援 PDF、DOCX 格式 (最大 5MB)",
+    "parsing": "正在解析與分析履歷中...",
+    "parseSuccess": "履歷解析成功！",
+    "parseError": "履歷解析失敗，請檢查檔案後重試。",
+    "dailyLimitExceeded": "今日 AI 解析次數已達上限 (5/5)，請明天再試。",
+    "buttonImport": "解析並匯入",
+    "buttonCancel": "取消",
+    "errors": {
+      "fileTooLarge": "檔案太大。最大限制為 3MB。",
+      "invalidType": "檔案類型無效。僅支援 PDF、JPG 和 PNG。",
+      "notLoggedIn": "您必須登入才能使用此功能。",
+      "authFailed": "無法取得驗證權杖。",
+      "readFailed": "讀取檔案失敗。",
+      "serverUnavailable": "AI 服務無法使用。請確認伺服器已設定有效的 API 金鑰。",
+      "unexpected": "上傳過程中發生未預期的錯誤。"
+    },
+    "privacyNotice": "隱私權聲明：您的檔案在記憶體中安全處理，分析後立即刪除。我們不會儲存您的原始文件。上傳後請手動審閱產生的內容，以確保 AI 準確性。"
+  },
+  "home": {
+    "nav": {
+      "features": "特色",
+      "pricing": "定價",
+      "login": "登入",
+      "resumeEditor": "履歷編輯器"
+    },
+    "hero": {
+      "badge": "100% 免費開放履歷建立工具",
+      "title": "幾分鐘內打造您的完美履歷",
+      "subtitle": "在幾秒鐘內透過 AI 打造令人驚豔、可即時分享的專業履歷。",
+      "ctaStart": "免費開始建立",
+      "ctaDemo": "查看範例"
+    },
+    "features": {
+      "heading": "您展現最佳自我所需的一切",
+      "subheading": "Everything you need to showcase your best self.",
+      "manageTitle": "一站式帳號管理",
+      "manageDesc": "隨時隨地登入，在任何裝置上即時生成、管理並展示您的履歷。讓您的專業形象時刻在線。",
+      "liveTitle": "即時分享連結",
+      "liveDesc": "發送連結後才發現錯字？沒問題。編輯內容會即時更新，確保招募人員看到的永遠是您最新、最完美的專業履歷。",
+      "pdfTitle": "ATS 最佳化 PDF",
+      "pdfDesc": "捨棄令人眼花撩亂的複雜排版。我們提供單一、乾淨的格式，不僅讓招募人員一目了然，更確保 ATS 系統能完美解析。",
+      "aiJobHuntingTitle": "AI 求職得力助手",
+      "aiJobHuntingDesc": "AI 將為您量身打造履歷、比對職缺需求、撰寫求職信，並全自動化幫您投遞至 LinkedIn 等各大求職平台。",
+      "whyTitle": "為什麼選擇 PresenceCV？"
+    },
+    "pricing": {
+      "heading": "簡單透明的方案選擇",
+      "subheading": "今天即可免費開始使用，僅在您需要高級功能時進行升級。",
+      "freeName": "免費方案",
+      "freePrice": "$0",
+      "freePeriod": "永久免費",
+      "freeDesc": "適合正在打造核心履歷的求職者。",
+      "freeFeature1": "最多建立 3 份獨立履歷版本",
+      "freeFeature2": "每日 5 次 AI 履歷解析額度",
+      "freeFeature3": "即時 PDF 匯出與線上連結",
+      "proName": "Pro 專業方案",
+      "proPrice": "$9",
+      "proPeriod": "/ 月",
+      "proDesc": "適合需要 AI 最佳化與自動投遞的活躍求職者。",
+      "proFeature1": "無限制履歷版本數量",
+      "proFeature2": "無限次 AI 解析與 ATS 關鍵字對比",
+      "proFeature3": "104 人力銀行履歷自動投遞機器人",
+      "comingSoon": "即將推出",
+      "title": "免費搶先體驗！",
+      "subtitle": "立即開始建立您的履歷。",
+      "free": {
+        "name": "免費",
+        "desc": "獲得面試機會所需的一切。",
+        "price": "$0 USD",
+        "period": "/月",
+        "features": {
+          "profiles": "3 份履歷版本",
+          "pdf": "無限次 PDF 匯出",
+          "share": "無限次即時與快照連結分享",
+          "ai": "每日 10 次 AI 自動投遞"
+        }
+      },
+      "pro": {
+        "name": "Pro",
+        "desc": "適合進階使用者與積極求職者。",
+        "price": "$5 USD",
+        "period": "/月",
+        "features": {
+          "profiles": "無限次履歷版本",
+          "pdf": "無限次無浮水印 PDF 匯出",
+          "share": "無限次即時與快照連結分享",
+          "ai": "每日 50 次 AI 排程與客製化自動投遞",
+          "advanced": "最新 AI 驅動求職功能"
+        },
+        "discount": "首月 5 折優惠"
+      }
+    },
+    "footer": {
+      "tagline": "由獨立開發者 Joe 打造",
+      "rights": "© 2026 PresenceCV. 保留所有權利。",
+      "privacy": "隱私權政策",
+      "terms": "服務條款",
+      "copyright": "© 2026 PresenceCV"
+    }
+  },
+  "viewer": {
+    "exportPdf": "匯出 PDF",
+    "editResume": "編輯履歷",
+    "print": "列印 / 儲存 PDF",
+    "backToEditor": "返回編輯器",
+    "loading": {
+      "print": "準備列印文件中...",
+      "profile": "載入履歷中..."
+    },
+    "goToEditor": "回到編輯器",
+    "watermark": "Built with PresenceCV",
+    "errors": {
+      "notFound": "找不到此履歷。",
+      "permissionDenied": "權限不足。",
+      "offline": "無法連線至伺服器。請檢查您的網路連線或應用程式設定。",
+      "invalidLink": "載入履歷失敗。請確認連結是否正確。"
+    }
+  },
+  "setupGuide": {
+    "title": "需要設定",
+    "desc": "缺少 Firebase 環境變數。此應用程式需要資料庫才能運作。",
+    "missingVars": "缺少的變數",
+    "howToFix": "如何修復：",
+    "step1": "打開 AI Studio 的 <b>設定</b> (左下角)。",
+    "step2": "前往 <b>環境變數</b>。",
+    "step3": "從您的 Firebase 專案中加入上述的鍵值。",
+    "step4": "重新整理此預覽視窗。",
+    "checkAgain": "再次檢查"
+  },
+  "auth": {
+    "alerts": {
+      "popupBlocked": "彈出視窗被瀏覽器封鎖。請允許本網站的彈出視窗以登入。",
+      "storageBlocked": "儲存分區封鎖了在預覽 iFrame 內的登入。\n\n如需正確使用其他 Google 帳戶，請點擊「在新分頁開啟」圖示（右上角 ➚）並直接在該處登入。",
+      "tooManyRequests": "登入嘗試次數過多。請稍後再試。",
+      "failed": "登入失敗。請重試。"
+    }
+  },
+  "legal": {
+    "backToHome": "返回首頁",
+    "terms": {
+      "title": "服務條款",
+      "lastUpdated": "最後更新：2026年5月",
+      "acceptanceTitle": "1. 接受條款",
+      "acceptanceDesc": "藉由存取或使用 PresenceCV，即表示您同意接受這些服務條款。如果您不同意本條款的任何部分，請勿使用我們的服務。",
+      "serviceTitle": "2. 服務說明",
+      "serviceDesc": "PresenceCV 提供了一項線上工具，能讓使用者建立、管理並分享專業履歷。我們保留隨時修改、暫停或終止服務的權利。",
+      "userTitle": "3. 使用者責任",
+      "userDesc": "您對在帳號中建立的所有內容負完全責任。請勿在上傳或輸入任何非法、冒犯或侵犯他人權利的內容。我們保留移除違規內容的權利。",
+      "intellectualTitle": "4. 智慧財產權",
+      "intellectualDesc": "您保留對您的履歷資料的所有權。PresenceCV 網站的結構、設計及原始碼均為我們的智慧財產，未經明確授權不得擅自複製。",
+      "limitationTitle": "5. 責任限制",
+      "limitationDesc": "在法律允許的最大範圍內，PresenceCV 對於使用我們服務所造成的任何間接、偶然或必然的損失不承擔責任。"
+    },
+    "privacy": {
+      "title": "隱私權政策",
+      "lastUpdated": "最後更新：2026年5月",
+      "introTitle": "1. 簡介",
+      "introDesc": "歡迎來到 PresenceCV。我們致力於保護您的個人資訊及隱私權。本隱私權政策將說明當您使用我們的履歷建立服務時，我們如何收集、使用及保護您的資料。",
+      "collectTitle": "2. 我們收集的資訊",
+      "collectGoogle": "<strong>Google 帳號資訊：</strong> 我們透過 Google 進行驗證，僅存取 Google 提供的基本個人資料（例如您的電子郵件與姓名），用於建立與保護您的帳號。",
+      "collectResume": "<strong>履歷資料：</strong> 您在履歷編輯器中輸入的任何文字、連結或資訊都安全地儲存在我們的資料庫中。這些資料完全與您的帳號綁定，僅用於產生履歷與您指定分享的連結。",
+      "useTitle": "3. 我們如何使用您的資訊",
+      "use1": "- 用於提供與維護 PresenceCV 服務。",
+      "use2": "- 用於讓您匯出或分享履歷。",
+      "use3": "- 我們<strong>不會</strong>與第三方行銷人員或廣告商出售、出租或分享您的履歷資料。",
+      "securityTitle": "4. 資料安全",
+      "securityDesc": "您的資料儲存於業界標準的後端架構 (Firebase)，並具備嚴格的安全性規則。只有您已驗證的 Google 帳號才能讀寫您的個人履歷。",
+      "contactTitle": "5. 聯絡我們",
+      "contactDesc": "如果您對本政策有任何疑問或建議，可以透過網站上提供的管道與我們聯繫。"
+    },
+    "privacyText": "我們不會與第三方行銷人員或廣告商出售、出租或分享您的履歷資料。"
+  }
+}

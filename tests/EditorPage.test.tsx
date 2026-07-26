@@ -6,6 +6,7 @@ import { MemoryRouter } from 'react-router-dom';
 import * as AuthContext from '../src/contexts/AuthContext';
 import * as useResume from '../src/hooks/useResume';
 
+
 // Mock dependencies
 vi.mock('../src/hooks/useResume', () => ({
   useResume: vi.fn()

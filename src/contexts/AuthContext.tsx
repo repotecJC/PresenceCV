@@ -24,6 +24,7 @@
  * Firestore writes: users/{uid} (on first login)
  */
 import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { auth, db } from '../lib/firebase';
 import { onAuthStateChanged, User, signInWithPopup, GoogleAuthProvider, signOut as firebaseSignOut, browserPopupRedirectResolver } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -41,6 +42,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { t } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [isNewUser, setIsNewUser] = useState(false);
@@ -113,14 +115,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // User intentionally closed the popup, fail silently
         return;
       } else if (error.code === 'auth/popup-blocked') {
-        alert('Popup blocked by browser. Please allow popups for this site to sign in.');
+        alert(t('auth.alerts.popupBlocked'));
       } else if (error.code === 'auth/missing-initial-state' || (error.message && error.message.includes('missing initial state'))) {
-        alert('Storage partition blocked the sign back in inside the Preview iFrame.\n\nTo use a different Google account properly, please click the "Open in new tab" icon (top right ➚) and sign in directly there.');
+        alert(t('auth.alerts.storageBlocked'));
       } else if (error.code === 'auth/too-many-requests') {
-        alert('Too many sign-in attempts. Please try again later.');
+        alert(t('auth.alerts.tooManyRequests'));
       } else {
         console.error('Sign-in error:', error);
-        alert('Failed to sign in. Please try again.');
+        alert(t('auth.alerts.failed'));
       }
       throw error;
     }

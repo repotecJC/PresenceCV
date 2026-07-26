@@ -1,0 +1,317 @@
+{
+  "editor": {
+    "sections": {
+      "info": "Profile Info",
+      "experience": "Experience",
+      "education": "Education",
+      "skills": "Skills",
+      "languages": "Languages"
+    },
+    "info": {
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "e.g. Alex Chen",
+      "jobTitle": "Job Title / Headline",
+      "jobTitlePlaceholder": "e.g. Senior Frontend Engineer",
+      "email": "Email",
+      "emailPlaceholder": "e.g. alex@example.com",
+      "phone": "Phone",
+      "phonePlaceholder": "e.g. +886 912 345 678",
+      "location": "Location",
+      "locationPlaceholder": "e.g. Taipei, Taiwan",
+      "website": "Website / Portfolio",
+      "websitePlaceholder": "e.g. https://alexchen.dev",
+      "summary": "Professional Summary",
+      "summaryPlaceholder": "Briefly introduce your professional background, core expertise, and value...",
+      "rewriteWithAi": "Rewrite with AI",
+      "aiSuggestionTitle": "AI Suggested Summary",
+      "applyAiSuggestion": "Apply Suggestion",
+      "recommendedLength": "Recommended Length: 250-400",
+      "chars": "chars",
+      "summaryLength": {
+        "empty": "Type your summary",
+        "tooShort": "Too short",
+        "aBitShort": "A bit short",
+        "optimal": "Optimal length",
+        "aBitLong": "A bit long",
+        "tooLong": "Too long"
+      }
+    },
+    "listBlock": {
+      "roleTitle": "Role / Position",
+      "roleTitlePlaceholder": "e.g. Senior Software Engineer",
+      "subtitle": "Company / Organization",
+      "subtitlePlaceholder": "e.g. Google Inc.",
+      "dateRange": "Date Range",
+      "dateRangePlaceholder": "e.g. 2021 - Present",
+      "description": "Description / Key Accomplishments",
+      "descriptionPlaceholder": "Describe your responsibilities, achievements, and impact...",
+      "addItem": "Add Item",
+      "deleteItem": "Delete Item",
+      "maxItemsWarning": "Having more than 4 items may cause PDF text to become too small."
+    },
+    "tagsBlock": {
+      "category": "Category Name",
+      "categoryPlaceholder": "e.g. Programming Languages",
+      "tags": "Skills / Tags (comma separated)",
+      "tagsPlaceholder": "e.g. TypeScript, React, Node.js",
+      "addCategory": "Add Skill Category",
+      "deleteCategory": "Delete Category"
+    },
+    "profileSwitcher": {
+      "switchResume": "Switch Resume",
+      "createNew": "Copy Current Profile",
+      "rename": "Rename",
+      "delete": "Delete Profile",
+      "limitReached": "Resume Limit Reached (Max 3 for Free tier)",
+      "newProfileName": "Copy of Resume",
+      "renameTitle": "Rename Resume",
+      "createTitle": "Create New Resume",
+      "defaultName": "Resume"
+    },
+    "photoCrop": {
+      "uploadPhoto": "Upload Photo",
+      "changePhoto": "Change Photo",
+      "removePhoto": "Remove Photo",
+      "cropTitle": "Crop Profile Photo",
+      "save": "Save Photo"
+    },
+    "layout": {
+      "themes": "Themes",
+      "uploadResume": "Upload Resume",
+      "profilePreview": "Profile Preview",
+      "addListView": "Add List View",
+      "addTagView": "Add Tag View",
+      "listView": "List View",
+      "tagView": "Tag View"
+    },
+    "sidebar": {
+      "share": "Share"
+    },
+    "tabs": {
+      "info": "Info"
+    },
+    "loadingProfiles": "Loading your profiles...",
+    "alerts": {
+      "limitReached": "You have reached the maximum number of 3 resumes for non-pro users. Please upgrade to Pro or delete an existing resume to import a new one.",
+      "allowPopups": "Please allow popups to generate the PDF.",
+      "unsupportedFormat": "Only JPG, PNG, and HEIF formats are supported."
+    }
+  },
+  "common": {
+    "logout": "Log Out",
+    "logoutModal": {
+      "title": "Confirm Logout",
+      "ready": "Ready to leave?",
+      "desc": "You are about to log out of your account. You will need to log back in to access your resumes.",
+      "cancel": "Cancel",
+      "confirm": "Log Out"
+    },
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "okay": "Okay",
+    "deleteSectionTitle": "Delete Section?",
+    "deleteSectionDesc": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone.",
+    "unableToDeleteProfileTitle": "Unable to delete the profile",
+    "unableToDeleteProfileDesc": "At least one profile must be retained",
+    "deleteResumeTitle": "Delete Resume?",
+    "deleteResumeDesc": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+    "shareResume": "Share Your Resume",
+    "shareResumeDesc": "Choose how you want to share your profile with the world.",
+    "snapshotLink": "Snapshot Link",
+    "snapshotLinkDesc": "Captures your resume exactly as it is right now. Automatically updates only when you make changes.",
+    "generating": "Generating…",
+    "generateFailed": "Failed to generate. Close and reopen to retry.",
+    "copied": "Copied!",
+    "copy": "Copy",
+    "liveLink": "Live Link",
+    "active": "Active",
+    "liveLinkDesc": "A permanent link that always reflects your latest edits. Tied to this profile — deleting the profile removes the link.",
+    "creatingLiveLink": "Creating live link…",
+    "createLiveLink": "Create Live Link for this profile",
+    "exportPdf": "Export PDF",
+    "exportPdfDesc": "Generate and download a high-quality PDF version of your resume.",
+    "generatePdf": "Generate PDF",
+    "user": "User",
+    "error": "Error",
+    "errorBoundary": {
+      "title": "Something went wrong",
+      "tryAgain": "Try again"
+    }
+  },
+  "importModal": {
+    "title": "Import Resume with AI",
+    "subtitle": "Upload an existing PDF or DOCX file to automatically populate your profile using AI.",
+    "dropzoneText": "Drag and drop your file here, or click to browse",
+    "supportedFormats": "Supports PDF, DOCX (Max 5MB)",
+    "parsing": "Analyzing and parsing resume...",
+    "parseSuccess": "Resume parsed successfully!",
+    "parseError": "Failed to parse resume. Please check the file and try again.",
+    "dailyLimitExceeded": "Daily AI parse limit reached (5/5). Please try again tomorrow.",
+    "buttonImport": "Parse & Import",
+    "buttonCancel": "Cancel",
+    "errors": {
+      "fileTooLarge": "File is too large. Maximum size is 3MB.",
+      "invalidType": "Invalid file type. Only PDF, JPG, and PNG are supported.",
+      "notLoggedIn": "You must be logged in to use this feature.",
+      "authFailed": "Failed to get authentication token.",
+      "readFailed": "Failed to read file.",
+      "serverUnavailable": "AI service unavailable. Please ensure the server is configured with a valid API key.",
+      "unexpected": "An unexpected error occurred during upload."
+    },
+    "privacyNotice": "Privacy Notice: Your file is processed securely in memory and deleted immediately after analysis. We do not store your original document. Please manually review the generated content after upload to ensure AI accuracy."
+  },
+  "home": {
+    "nav": {
+      "features": "Features",
+      "pricing": "Pricing",
+      "login": "Log In",
+      "resumeEditor": "Resume Editor"
+    },
+    "hero": {
+      "badge": "100% Free & Open Creator",
+      "title": "Build Your Perfect Resume in Minutes",
+      "subtitle": "Build stunning, shareable resumes powered by AI — in seconds.",
+      "ctaStart": "Start Building Free",
+      "ctaDemo": "View Demo"
+    },
+    "features": {
+      "heading": "Everything you need to showcase your best self.",
+      "subheading": "Everything you need to showcase your best self.",
+      "manageTitle": "Manage in One Account",
+      "manageDesc": "Log in from anywhere to instantly generate, manage, and present your resume across any device. Your professional presence, always accessible.",
+      "liveTitle": "Live Share Link",
+      "liveDesc": "Found a typo after sending the link? No problem. Edits update in real-time, ensuring recruiters always see your perfect, up-to-date professional profile.",
+      "pdfTitle": "ATS-Optimized PDF",
+      "pdfDesc": "Skip the confusing, overly-decorated layouts. We provide a single, clean format built to be easily read by recruiters and perfectly parsed by ATS scanners.",
+      "aiJobHuntingTitle": "AI Job-Hunting Sidekick",
+      "aiJobHuntingDesc": "AI that tailors your resume, matches JDs, writes cover letters, and fully automates applying to LinkedIn and other top job platforms.",
+      "whyTitle": "Why PresenceCV?"
+    },
+    "pricing": {
+      "heading": "Simple, transparent pricing",
+      "subheading": "Get started for free today. Upgrade only if you need advanced capabilities.",
+      "freeName": "Free Tier",
+      "freePrice": "$0",
+      "freePeriod": "forever",
+      "freeDesc": "Ideal for job seekers building their core resume.",
+      "freeFeature1": "Up to 3 distinct resume profiles",
+      "freeFeature2": "5 AI resume parses per day",
+      "freeFeature3": "Instant PDF exports & Live links",
+      "proName": "Pro Tier",
+      "proPrice": "$9",
+      "proPeriod": "/ month",
+      "proDesc": "For active job seekers who need AI optimization.",
+      "proFeature1": "Unlimited resume profiles",
+      "proFeature2": "Unlimited AI parses & ATS Keyword Matching",
+      "proFeature3": "104 Job Auto-Applier Integration",
+      "comingSoon": "Coming Soon",
+      "title": "Early Access: Free for all",
+      "subtitle": "Start building your resume immediately.",
+      "free": {
+        "name": "Free",
+        "desc": "Everything you need to land an interview.",
+        "price": "$0 USD",
+        "period": "/mo",
+        "features": {
+          "profiles": "3 resume profiles",
+          "pdf": "Unlimited PDF export",
+          "share": "Unlimited live & snapshot link sharing",
+          "ai": "10 AI fully auto job appling / day"
+        }
+      },
+      "pro": {
+        "name": "Pro",
+        "desc": "For power users and active job seekers.",
+        "price": "$5 USD",
+        "period": "/mo",
+        "features": {
+          "profiles": "Unlimited profiles",
+          "pdf": "Unlimited PDF export without watermark",
+          "share": "Unlimited live & snapshot link sharing",
+          "ai": "50 AI schedule & customized fully auto job appling / day",
+          "advanced": "Latest AI-powered job hunting functions"
+        },
+        "discount": "First month 50% off"
+      }
+    },
+    "footer": {
+      "tagline": "Crafted with care by independent developer Joe.",
+      "rights": "© 2026 PresenceCV. All rights reserved.",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "copyright": "© 2026 PresenceCV"
+    }
+  },
+  "viewer": {
+    "exportPdf": "Export PDF",
+    "editResume": "Edit Resume",
+    "print": "Print / Save PDF",
+    "backToEditor": "Back to Editor",
+    "loading": {
+      "print": "Preparing Document...",
+      "profile": "Loading Profile..."
+    },
+    "goToEditor": "Go to Editor",
+    "watermark": "Built with PresenceCV",
+    "errors": {
+      "notFound": "Resume not found.",
+      "permissionDenied": "Permission denied.",
+      "offline": "Unable to reach the server. Please check your internet connection or the application configuration.",
+      "invalidLink": "Failed to load resume. Please verify the link."
+    }
+  },
+  "setupGuide": {
+    "title": "Configuration Required",
+    "desc": "Firebase environment variables are missing. This application requires a database to function.",
+    "missingVars": "Missing Variables",
+    "howToFix": "How to fix this:",
+    "step1": "Open <b>Settings</b> in AI Studio (bottom left).",
+    "step2": "Go to <b>Environment Variables</b>.",
+    "step3": "Add the keys listed above from your Firebase project.",
+    "step4": "Refresh this preview window.",
+    "checkAgain": "Check Again"
+  },
+  "auth": {
+    "alerts": {
+      "popupBlocked": "Popup blocked by browser. Please allow popups for this site to sign in.",
+      "storageBlocked": "Storage partition blocked the sign back in inside the Preview iFrame.\n\nTo use a different Google account properly, please click the \"Open in new tab\" icon (top right ➚) and sign in directly there.",
+      "tooManyRequests": "Too many sign-in attempts. Please try again later.",
+      "failed": "Failed to sign in. Please try again."
+    }
+  },
+  "legal": {
+    "backToHome": "Back to Home",
+    "terms": {
+      "title": "Terms of Service",
+      "lastUpdated": "Last updated: May 2026",
+      "acceptanceTitle": "1. Acceptance of Terms",
+      "acceptanceDesc": "By accessing or using PresenceCV, you agree to be bound by these Terms of Service. If you disagree with any part of the terms, then you may not access the service.",
+      "serviceTitle": "2. Description of Service",
+      "serviceDesc": "PresenceCV provides an online tool for creating, managing, and sharing professional resumes. We reserve the right to modify, suspend, or discontinue the service at any time.",
+      "userTitle": "3. User Responsibilities",
+      "userDesc": "You are responsible for the content you create and maintain within your account. You agree not to upload or enter any unlawful, offensive, or infringing material. We reserve the right to remove violating content.",
+      "intellectualTitle": "4. Intellectual Property",
+      "intellectualDesc": "You retain all rights to your personal resume data. The PresenceCV website structure, design, and source code are our intellectual property and may not be copied without express permission.",
+      "limitationTitle": "5. Limitation of Liability",
+      "limitationDesc": "To the maximum extent permitted by law, PresenceCV shall not be liable for any indirect, incidental, or consequential damages resulting from the use of our service."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "lastUpdated": "Last updated: May 2026",
+      "introTitle": "1. Introduction",
+      "introDesc": "Welcome to PresenceCV. We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, and safeguard your data when you use our resume building service.",
+      "collectTitle": "2. Information We Collect",
+      "collectGoogle": "<strong>Google Account Information:</strong> We authenticate users via Google. We only access the basic profile information (such as your email address and name) provided by Google to create and secure your account.",
+      "collectResume": "<strong>Resume Data:</strong> Any text, links, or information you enter into the resume editor is stored securely in our database. This data is exclusively tied to your account and is used solely for the purpose of generating your resume and sharing links as you direct.",
+      "useTitle": "3. How We Use Your Information",
+      "use1": "- To provide and maintain the PresenceCV service.",
+      "use2": "- To allow you to export or share your resume.",
+      "use3": "- We <strong>do not</strong> sell, rent, or share your resume data with third-party marketers or advertisers.",
+      "securityTitle": "4. Data Security",
+      "securityDesc": "Your data is stored using industry-standard backend infrastructure (Firebase) with strictly enforced security rules. Only your authenticated Google account can read or write to your personal resume profiles.",
+      "contactTitle": "5. Contact Us",
+      "contactDesc": "If you have questions or comments about this notice, you may contact us through the respective channels provided on the site."
+    },
+    "privacyText": "We do not sell, rent, or share your resume data with third-party marketers or advertisers."
+  }
+}

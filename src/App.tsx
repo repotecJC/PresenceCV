@@ -32,14 +32,16 @@ import TermsPage from './pages/TermsPage';
 import { isConfigValid } from './lib/firebase';
 import FirebaseSetupGuide from './components/FirebaseSetupGuide';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useTranslation } from 'react-i18next';
 
 function ErrorFallback({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) {
+  const { t } = useTranslation();
   return (
     <div role="alert" className="p-8 flex flex-col items-center justify-center min-h-screen bg-gray-50 text-gray-900">
-      <h2 className="text-2xl font-bold mb-4">Something went wrong</h2>
+      <h2 className="text-2xl font-bold mb-4">{t('common.errorBoundary.title')}</h2>
       <pre className="text-red-500 bg-red-50 p-4 rounded-lg overflow-auto max-w-full text-sm">{error.message}</pre>
       <button onClick={resetErrorBoundary} className="mt-6 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-        Try again
+        {t('common.errorBoundary.tryAgain')}
       </button>
     </div>
   );
