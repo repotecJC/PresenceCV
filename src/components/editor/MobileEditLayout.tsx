@@ -754,7 +754,6 @@ export default function MobileEditLayout(props: EditorLayoutProps) {
             </button>
             <Link
               to="/view"
-              target="_blank"
               className="bg-white px-6 py-3 rounded-full flex items-center justify-center gap-2 text-xs md:text-sm tracking-widest hover:bg-[#eceae4] transition-colors text-[#1c1c1c] border border-[#eceae4] shadow-sm whitespace-nowrap"
             >
               <LucideIcons.Eye className="w-4 h-4 text-accent" /> {t("editor.layout.profilePreview")}
