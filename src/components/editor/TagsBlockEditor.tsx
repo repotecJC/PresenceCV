@@ -235,7 +235,7 @@ const TagItemEditor = React.memo(({ provided, snapshot, blockId, item, index, to
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={tags.length === 0 ? t('editor.tagsBlock.tags') : ''}
-            className="bg-transparent outline-none text-base tracking-wide text-[#5f5f5d] flex-1 min-w-[60px] p-0 m-0"
+            className="bg-transparent outline-none text-base tracking-wide text-[#5f5f5d] flex-1 min-w-[200px] p-0 m-0"
           />
         </div>
       </div>
