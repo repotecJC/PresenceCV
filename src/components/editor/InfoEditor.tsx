@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/refs, react-hooks/immutability -- Intentional: callback-ref assignments and ref access in event handlers for IME composition focus management */
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as LucideIcons from 'lucide-react';
 import isEqual from 'fast-deep-equal';
 import { ResumeData } from '../../types';
@@ -72,6 +73,7 @@ export function useDebouncedInput(
 }
 
 const InfoEditor = React.memo(({ data, updateProfile, updateContactItem, removeContactItem, addContactItem, AVAILABLE_ICONS }: InfoEditorProps) => {
+  const { t } = useTranslation();
   const nameInput = useDebouncedInput(data.profile.name, (val) => updateProfile('name', val));
   const titleInput = useDebouncedInput(data.profile.title, (val) => updateProfile('title', val));
   const summaryInput = useDebouncedInput(data.profile.summary, (val) => updateProfile('summary', val));
@@ -81,23 +83,23 @@ const InfoEditor = React.memo(({ data, updateProfile, updateContactItem, removeC
   // 中文字一個算一字元，標點符號不算 (移除所有標點與空白)
   const charCount = (summaryInput.localValue || '').replace(/[\p{P}\p{S}\s]/gu, '').length;
   let countColor = 'text-text-secondary';
-  let countStatus = 'Type your summary';
+  let countStatus = t('editor.info.summaryLength.empty');
   if (charCount > 0) {
     if (charCount < 100) {
-      countColor = 'text-red-400';
-      countStatus = 'Too short';
+      countColor = 'text-red-500';
+      countStatus = t('editor.info.summaryLength.tooShort');
     } else if (charCount < 250) {
-      countColor = 'text-yellow-400';
-      countStatus = 'A bit short';
+      countColor = 'text-amber-500';
+      countStatus = t('editor.info.summaryLength.aBitShort');
     } else if (charCount <= 400) {
-      countColor = 'text-green-400';
-      countStatus = 'Optimal length';
+      countColor = 'text-green-600';
+      countStatus = t('editor.info.summaryLength.optimal');
     } else if (charCount <= 500) {
-      countColor = 'text-yellow-400';
-      countStatus = 'A bit long';
+      countColor = 'text-amber-500';
+      countStatus = t('editor.info.summaryLength.aBitLong');
     } else {
-      countColor = 'text-red-400';
-      countStatus = 'Too long';
+      countColor = 'text-red-500';
+      countStatus = t('editor.info.summaryLength.tooLong');
     }
   }
 
@@ -111,7 +113,7 @@ const InfoEditor = React.memo(({ data, updateProfile, updateContactItem, removeC
           onChange={nameInput.onChange}
           onBlur={nameInput.onBlur}
           className="text-3xl sm:text-5xl md:text-[64px] lg:text-[80px] font-semibold leading-[1.05] tracking-[-1px] sm:tracking-[-2.5px] text-accent mb-6 outline-none focus:border-b focus:border-accent/50 border-b border-transparent transition-colors min-w-0 text-center bg-transparent w-full max-w-full"
-          placeholder="Your Name"
+          placeholder={t('editor.info.fullNamePlaceholder')}
         />
         { }
         <input
@@ -120,7 +122,7 @@ const InfoEditor = React.memo(({ data, updateProfile, updateContactItem, removeC
           onChange={titleInput.onChange}
           onBlur={titleInput.onBlur}
           className="text-sm sm:text-lg md:text-xl tracking-[0.2em] sm:tracking-[0.4em] text-text-secondary outline-none focus:border-b focus:border-accent/50 border-b border-transparent transition-colors min-w-0 text-center bg-transparent w-full max-w-full"
-          placeholder="Professional Title"
+          placeholder={t('editor.info.jobTitlePlaceholder')}
         />
       </div>
 
@@ -142,7 +144,7 @@ const InfoEditor = React.memo(({ data, updateProfile, updateContactItem, removeC
           onClick={addContactItem}
           className="mt-2 flex items-center gap-2 text-xs tracking-widest text-text-secondary hover:text-accent transition-colors"
         >
-          <LucideIcons.Plus className="w-3 h-3" /> Add Link
+          <LucideIcons.Plus className="w-3 h-3" /> {t('editor.listBlock.addItem')}
         </button>
       </div>
 
@@ -162,8 +164,8 @@ const InfoEditor = React.memo(({ data, updateProfile, updateContactItem, removeC
       >
         <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-4 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-all z-20 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto before:absolute before:-top-16 before:-left-10 before:-right-10 before:h-16 before:content-['']">
           <div className={`flex items-center gap-2 text-xs font-medium tracking-wider whitespace-nowrap ${countColor}`}>
-             <span className="font-semibold opacity-70">Recommended Length: 250-400</span>
-             <span className="font-mono ml-2 pl-2 border-l border-current/20">{charCount} chars</span>
+            <span className="font-semibold opacity-70">{t('editor.info.recommendedLength')}</span>
+            <span className="font-mono ml-2 pl-2 border-l border-current/20">{charCount} {t('editor.info.chars')}</span>
              {charCount > 0 && (
                <span className="ml-1 opacity-90">{countStatus}</span>
              )}
@@ -187,7 +189,7 @@ const InfoEditor = React.memo(({ data, updateProfile, updateContactItem, removeC
             onChange={summaryInput.onChange}
             onBlur={summaryInput.onBlur}
             className="absolute inset-0 italic text-xl sm:text-2xl leading-relaxed text-[#5f5f5d] outline-none focus:bg-black/5 p-4 -m-4 rounded-xl transition-colors min-h-[100px] bg-transparent w-full resize-none overflow-hidden text-left"
-            placeholder="A short summary about yourself..."
+            placeholder={t('editor.info.summaryPlaceholder')}
           />
         </div>
         </div>
@@ -198,6 +200,7 @@ const InfoEditor = React.memo(({ data, updateProfile, updateContactItem, removeC
 });
 
 const ContactItemEditor = React.memo(({ item, Icon, updateContactItem, removeContactItem, AVAILABLE_ICONS }: any) => {
+  const { t } = useTranslation();
   const textInput = useDebouncedInput(item.text, (val) => updateContactItem(item.id, 'text', val));
   const urlInput = useDebouncedInput(item.url || '', (val) => updateContactItem(item.id, 'url', val));
   const [isIconMenuOpen, setIsIconMenuOpen] = useState(false);
@@ -252,7 +255,7 @@ const ContactItemEditor = React.memo(({ item, Icon, updateContactItem, removeCon
           defaultValue={textInput.defaultValue}
           onChange={textInput.onChange}
           onBlur={textInput.onBlur}
-          placeholder="Display Text"
+          placeholder={t('editor.info.fullName')}
           className="flex-1 min-w-0 w-full bg-transparent border-b border-[#eceae4] focus:border-accent outline-none text-base sm:text-lg text-[#1c1c1c] transition-colors"
         />
       </div>
@@ -261,7 +264,7 @@ const ContactItemEditor = React.memo(({ item, Icon, updateContactItem, removeCon
         defaultValue={urlInput.defaultValue}
         onChange={urlInput.onChange}
         onBlur={urlInput.onBlur}
-        placeholder="URL (optional)"
+        placeholder={t('editor.info.website')}
         className="flex-1 min-w-0 w-full bg-transparent border-b border-[#eceae4] focus:border-accent outline-none text-xs sm:text-sm text-[#5f5f5d] transition-colors"
       />
       {isConfirmingDelete ? (
@@ -272,7 +275,7 @@ const ContactItemEditor = React.memo(({ item, Icon, updateContactItem, removeCon
           }}
           className="px-2.5 py-1 bg-red-500 text-white text-xs rounded-lg font-medium hover:bg-red-600 transition-all self-end sm:self-center shrink-0 shadow-sm"
         >
-          Confirm?
+          {t('common.confirm')}
         </button>
       ) : (
         <button 
