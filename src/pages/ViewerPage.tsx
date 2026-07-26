@@ -499,7 +499,6 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
         </div>
 
         <div className="flex-1 flex justify-end items-center gap-4 w-full xl:w-auto">
-          {isShared && <LanguageSwitcher fullWidth={false} />}
           {isShared ? (
             <button
               onClick={() => {
