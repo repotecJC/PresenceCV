@@ -350,7 +350,7 @@ export default function MobileEditLayout(props: EditorLayoutProps) {
           <button
             onClick={openShareModal}
             disabled={isSharing}
-            className={`hidden p-3 lg:px-5 lg:py-3 rounded-full flex items-center justify-center lg:justify-between gap-4 w-full bg-white/50 text-[#1c1c1c] hover:bg-white transition-colors disabled:opacity-50 border border-[#eceae4] shadow-sm group shrink-0 ${isSidebarCollapsed ? 'lg:p-3 lg:justify-center lg:rounded-2xl' : ''}`}
+            className={`p-3 lg:px-5 lg:py-3 rounded-full flex items-center justify-center lg:justify-between gap-4 w-full bg-white/50 text-[#1c1c1c] hover:bg-white transition-colors disabled:opacity-50 border border-[#eceae4] shadow-sm group shrink-0 ${isSidebarCollapsed ? 'lg:p-3 lg:justify-center lg:rounded-2xl' : ''}`}
           >
             <div className="flex items-center gap-3">
               <LucideIcons.Share2 className="w-4 h-4 text-accent shrink-0 lg:w-4 lg:h-4" />
@@ -391,7 +391,7 @@ export default function MobileEditLayout(props: EditorLayoutProps) {
               <button
                 onClick={openShareModal}
                 disabled={isSharing}
-                className="hidden p-2 rounded-xl bg-white/50 border border-[#eceae4] text-[#1c1c1c] hover:bg-white shadow-sm shrink-0"
+                className="p-2 rounded-xl bg-white/50 border border-[#eceae4] text-[#1c1c1c] hover:bg-white shadow-sm shrink-0"
                 title="Share Resume"
               >
                 <LucideIcons.Share2 className="w-4 h-4 text-accent" />
