@@ -119,7 +119,7 @@ export function useResume() {
             if (remoteData.activeProfileId && remoteData.profiles) {
               const localData = appStateRef.current;
               // Check if remote data is newer than local data to prevent overwriting unsaved local edits
-              const isRemoteNewer = !localData?.updatedAt || !remoteData.updatedAt || remoteData.updatedAt >= localData.updatedAt;
+              const isRemoteNewer = !localData?.updatedAt || !remoteData.updatedAt || remoteData.updatedAt > localData.updatedAt;
               
               if (isRemoteNewer) {
                 setAppState(remoteData);
@@ -147,7 +147,8 @@ export function useResume() {
       return;
     }
 
-    localStorage.setItem(APP_STORAGE_KEY, JSON.stringify(appState));
+        const stateToSave = { ...appState, updatedAt: Date.now() };
+    localStorage.setItem(APP_STORAGE_KEY, JSON.stringify(stateToSave));
 
     // Do NOT push local state to firestore if we haven't resolved our initial auth check yet!
     if (!isRemoteReady.current) {
