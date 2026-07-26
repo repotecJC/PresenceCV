@@ -11,8 +11,10 @@
  */
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function TermsPage() {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen bg-[#f7f4ed] text-[#1c1c1c] font-sans pb-32">
       <nav className="sticky top-0 z-50 bg-[#f7f4ed]/80 backdrop-blur-md border-b border-[#eceae4]">
@@ -21,48 +23,38 @@ export default function TermsPage() {
             <img src="/favicon.png" className="w-6 h-6 rounded-full" style={{ mixBlendMode: 'multiply' }} alt="PresenceCV Logo" />
             <span className="text-xl font-semibold tracking-tight">PresenceCV</span>
           </Link>
-          <Link to="/" className="text-sm font-medium hover:underline">Back to Home</Link>
+          <Link to="/" className="text-sm font-medium hover:underline">{t('legal.backToHome')}</Link>
         </div>
       </nav>
 
       <div className="max-w-3xl mx-auto px-6 mt-16">
-        <h1 className="text-4xl font-semibold tracking-tight mb-8">Terms of Service</h1>
+        <h1 className="text-4xl font-semibold tracking-tight mb-8">{t('legal.terms.title')}</h1>
         <div className="prose prose-stone">
-          <p className="text-lg text-gray-600 mb-8">Last updated: May 2026</p>
+          <p className="text-lg text-gray-600 mb-8">{t('legal.terms.lastUpdated')}</p>
           
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">1. Agreement to Terms</h2>
-            <p className="text-gray-700 leading-relaxed mb-4">
-              By accessing or using PresenceCV, you agree to be bound by these Terms of Service. If you disagree with any part of the terms, then you may not access the service.
-            </p>
+            <h2 className="text-2xl font-semibold mb-4">{t('legal.terms.acceptanceTitle')}</h2>
+            <p className="text-gray-700 leading-relaxed mb-4">{t('legal.terms.acceptanceDesc')}</p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">2. Description of Service</h2>
-            <p className="text-gray-700 leading-relaxed mb-4">
-              PresenceCV provides a platform for generating, formatting, and sharing professional resumes. The service includes artificial intelligence tools to assist in content creation, which are provided "as is" without guaranteed accuracy.
-            </p>
+            <h2 className="text-2xl font-semibold mb-4">{t('legal.terms.serviceTitle')}</h2>
+            <p className="text-gray-700 leading-relaxed mb-4">{t('legal.terms.serviceDesc')}</p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">3. User Accounts</h2>
-            <p className="text-gray-700 leading-relaxed mb-4">
-              You are responsible for maintaining the confidentiality of your Google account login. PresenceCV is not liable for any loss or damage arising from your failure to protect your login credentials.
-            </p>
+            <h2 className="text-2xl font-semibold mb-4">{t('legal.terms.userTitle')}</h2>
+            <p className="text-gray-700 leading-relaxed mb-4">{t('legal.terms.userDesc')}</p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">4. Content Ownership</h2>
-            <p className="text-gray-700 leading-relaxed mb-4">
-              You retain all rights to the information and data you input into PresenceCV. However, by using the service, you grant us the right to process, format, and temporarily host this data to provide the service to you.
-            </p>
+            <h2 className="text-2xl font-semibold mb-4">{t('legal.terms.intellectualTitle')}</h2>
+            <p className="text-gray-700 leading-relaxed mb-4">{t('legal.terms.intellectualDesc')}</p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">5. Disclaimer</h2>
-            <p className="text-gray-700 leading-relaxed mb-4">
-              PresenceCV is provided on an "as is" and "as available" basis. We make no warranties, expressed or implied, regarding the continuous availability of the service or the specific outcomes of utilizing our AI tools for job applications.
-            </p>
+            <h2 className="text-2xl font-semibold mb-4">{t('legal.terms.limitationTitle')}</h2>
+            <p className="text-gray-700 leading-relaxed mb-4">{t('legal.terms.limitationDesc')}</p>
           </section>
         </div>
       </div>

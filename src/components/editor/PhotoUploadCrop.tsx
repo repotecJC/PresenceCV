@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import Cropper from 'react-easy-crop';
 import * as LucideIcons from 'lucide-react';
 import getCroppedImg from '../../lib/cropImage';
@@ -10,6 +11,7 @@ interface PhotoUploadCropProps {
 }
 
 const PhotoUploadCrop = React.memo(({ photo, photoPosition, updateProfile }: PhotoUploadCropProps) => {
+  const { t } = useTranslation();
   const [isPhotoDragging, setIsPhotoDragging] = useState(false);
   const [cropImageSrc, setCropImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -25,8 +27,8 @@ const PhotoUploadCrop = React.memo(({ photo, photoPosition, updateProfile }: Pho
   }, [isConfirmingPhotoDelete]);
 
   const handleImageUpload = (file: File) => {
-    if (!file.type.match(/^image\/(jpeg|jpg|png|heif|heic)$/i) && !file.name.match(/\.(jpg|jpeg|png|heif|heic)$/i)) {
-      alert("Only JPG, PNG, and HEIF formats are supported.");
+    if (!['image/jpeg', 'image/png', 'image/heic', 'image/heif'].includes(file.type)) {
+      alert(t('editor.alerts.unsupportedFormat'));
       return;
     }
     const reader = new FileReader();
@@ -93,7 +95,7 @@ const PhotoUploadCrop = React.memo(({ photo, photoPosition, updateProfile }: Pho
                   }} 
                   className="absolute top-2 right-2 px-2.5 py-1 bg-red-600 rounded-full text-white text-[10px] font-medium tracking-wide shadow-md z-10 transition-all"
                 >
-                  Confirm?
+                  {t('common.confirm')}
                 </button>
               ) : (
                 <button 
@@ -102,7 +104,7 @@ const PhotoUploadCrop = React.memo(({ photo, photoPosition, updateProfile }: Pho
                     setIsConfirmingPhotoDelete(true); 
                   }} 
                   className="absolute top-2 right-2 p-1.5 bg-red-500/80 rounded-full opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity hover:bg-red-500 z-10"
-                  title="Remove Photo"
+                  title={t('editor.photoCrop.removePhoto')}
                 >
                   <LucideIcons.X className="w-3 h-3 text-white" />
                 </button>
@@ -111,7 +113,7 @@ const PhotoUploadCrop = React.memo(({ photo, photoPosition, updateProfile }: Pho
           ) : (
             <div className="flex flex-col items-center gap-3 text-[#5f5f5d]">
                 <LucideIcons.ImagePlus className={`w-8 h-8 transition-colors ${isPhotoDragging ? 'text-accent' : 'opacity-50 group-hover:text-accent group-hover:opacity-100'}`} />
-                <span className="text-[10px] tracking-widest text-center px-4 opacity-70">Drop photo or Click</span>
+                <span className="text-[10px] tracking-widest text-center px-4 opacity-70">{t('editor.photoCrop.uploadPhoto')}</span>
             </div>
           )}
         </div>
@@ -138,7 +140,7 @@ const PhotoUploadCrop = React.memo(({ photo, photoPosition, updateProfile }: Pho
       {cropImageSrc && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20 backdrop-blur-sm p-4">
           <div className="bg-white p-6 md:p-8 rounded-3xl w-full max-w-2xl flex flex-col items-center border border-[#eceae4] shadow-xl relative">
-            <h3 className="text-xl font-medium text-[#1c1c1c] mb-6">Position Photo</h3>
+            <h3 className="text-xl font-medium text-[#1c1c1c] mb-6">{t('editor.photoCrop.cropTitle')}</h3>
             
             <div className="relative w-full h-[60vh] max-h-[500px] bg-black/5 rounded-2xl overflow-hidden mb-6">
               <Cropper
@@ -166,13 +168,13 @@ const PhotoUploadCrop = React.memo(({ photo, photoPosition, updateProfile }: Pho
                 onClick={() => { setCropImageSrc(null); setZoom(1); }}
                 className="flex-1 py-3.5 rounded-xl border border-[#eceae4] bg-white hover:bg-black/5 transition-colors text-[#1c1c1c] font-medium tracking-wide"
               >
-                Cancel
+                {t('common.cancel')}
               </button>
               <button
                 onClick={handleCropSave}
                 className="flex-[2] py-3.5 rounded-xl bg-accent text-[#f7f4ed] hover:opacity-90 font-medium tracking-wide shadow-lg shadow-accent/20 transition-all"
               >
-                Apply Crop
+                {t('editor.photoCrop.save')}
               </button>
             </div>
           </div>

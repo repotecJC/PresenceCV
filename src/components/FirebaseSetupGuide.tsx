@@ -15,8 +15,10 @@
  */
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function FirebaseSetupGuide() {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center p-6 font-sans">
       <div className="max-w-md w-full bg-white p-8 rounded-3xl border border-[#eceae4] shadow-xl space-y-6">
@@ -25,15 +27,15 @@ export default function FirebaseSetupGuide() {
         </div>
         
         <div className="space-y-2">
-          <h1 className="text-2xl font-bold tracking-tight">Configuration Required</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t('setupGuide.title')}</h1>
           <p className="text-slate-400 text-sm leading-relaxed">
-            Firebase environment variables are missing. This application requires a database to function.
+            {t('setupGuide.desc')}
           </p>
         </div>
 
         <div className="space-y-4">
           <div className="bg-white/5 p-4 rounded-xl border border-white/5 space-y-3">
-            <h2 className="text-xs uppercase tracking-widest font-semibold text-accent/80">Missing Variables</h2>
+            <h2 className="text-xs uppercase tracking-widest font-semibold text-accent/80">{t('setupGuide.missingVars')}</h2>
             <ul className="text-xs font-mono text-accent space-y-1 opacity-90">
               <li>• VITE_FIREBASE_API_KEY</li>
               <li>• VITE_FIREBASE_PROJECT_ID</li>
@@ -42,12 +44,12 @@ export default function FirebaseSetupGuide() {
           </div>
 
           <div className="space-y-3">
-            <h2 className="text-sm font-medium">How to fix this:</h2>
+            <h2 className="text-sm font-medium">{t('setupGuide.howToFix')}</h2>
             <ol className="text-xs text-slate-400 space-y-2 list-decimal list-inside">
-              <li>Open <b>Settings</b> in AI Studio (bottom left).</li>
-              <li>Go to <b>Environment Variables</b>.</li>
-              <li>Add the keys listed above from your Firebase project.</li>
-              <li>Refresh this preview window.</li>
+              <li dangerouslySetInnerHTML={{ __html: t('setupGuide.step1') }} />
+              <li dangerouslySetInnerHTML={{ __html: t('setupGuide.step2') }} />
+              <li dangerouslySetInnerHTML={{ __html: t('setupGuide.step3') }} />
+              <li dangerouslySetInnerHTML={{ __html: t('setupGuide.step4') }} />
             </ol>
           </div>
         </div>
@@ -57,7 +59,7 @@ export default function FirebaseSetupGuide() {
           className="w-full py-3 bg-white text-black rounded-xl font-semibold text-sm hover:bg-slate-200 transition-colors flex items-center justify-center gap-2"
         >
           <LucideIcons.RefreshCw className="w-4 h-4" />
-          Check Again
+          {t('setupGuide.checkAgain')}
         </button>
       </div>
     </div>

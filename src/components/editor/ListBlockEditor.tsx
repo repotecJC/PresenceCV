@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Droppable, Draggable } from '@hello-pangea/dnd';
 import * as LucideIcons from 'lucide-react';
 import isEqual from 'fast-deep-equal';
@@ -24,7 +25,7 @@ const ListBlockEditor = React.memo(({
   isMobile,
   reorderListItems
 }: ListBlockEditorProps) => {
-
+  const { t } = useTranslation();
   const titleInput = useDebouncedInput(block.title, (val) => updateBlockTitle(block.id, val));
 
   return (
@@ -37,12 +38,14 @@ const ListBlockEditor = React.memo(({
             onChange={titleInput.onChange}
             onBlur={titleInput.onBlur}
             className="bg-transparent border-b border-transparent hover:border-[#eceae4] focus:border-accent outline-none text-sm font-bold tracking-[0.2em] text-[#5f5f5d] pb-1 transition-colors "
-            placeholder="Section Title"
+            placeholder={t('editor.listBlock.titlePlaceholder')}
           />
           {block.items.length > 4 && (
             <div className="flex items-center gap-1.5 text-yellow-400 text-xs bg-yellow-400/10 px-3 py-1 rounded-full border border-yellow-400/20">
               <LucideIcons.AlertTriangle className="w-3 h-3" />
-              <span>Having more than 4 items may cause PDF text to become too small.</span>
+              <p className="text-xs text-[#5f5f5d]">
+              {t('editor.listBlock.maxItemsWarning')}
+            </p>
             </div>
           )}
         </div>
@@ -80,7 +83,7 @@ const ListBlockEditor = React.memo(({
         className="w-full bg-white/50 border border-[#eceae4] py-4 rounded-2xl flex items-center justify-center gap-2 text-[#5f5f5d] hover:text-accent hover:bg-white transition-all shadow-sm mt-6"
       >
         <LucideIcons.Plus className="w-4 h-4" />
-        <span className="text-xs tracking-widest">Add Item</span>
+        <span className="text-xs tracking-widest">{t('editor.listBlock.addItem')}</span>
       </button>
     </div>
   );
@@ -102,6 +105,7 @@ interface ListItemEditorProps {
 }
 
 const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, totalItems, updateListItem, removeListItem, isMobile, reorderListItems }: ListItemEditorProps) => {
+  const { t } = useTranslation();
   const titleInput = useDebouncedInput(item.title, (val) => updateListItem(blockId, item.id, 'title', val));
   const subtitleInput = useDebouncedInput(item.subtitle, (val) => updateListItem(blockId, item.id, 'subtitle', val));
   const periodInput = useDebouncedInput(item.period, (val) => updateListItem(blockId, item.id, 'period', val));
@@ -168,7 +172,7 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
           }}
           className="absolute top-4 right-4 px-2.5 py-1 bg-red-500 text-white text-xs rounded-lg font-medium hover:bg-red-600 transition-all z-10 shadow-sm"
         >
-          Confirm?
+          {t('common.confirm')}
         </button>
       ) : (
         <button 
@@ -186,7 +190,7 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
           onChange={titleInput.onChange}
           onBlur={titleInput.onBlur}
           className="w-full bg-transparent border-b border-[#eceae4] focus:border-accent outline-none text-2xl pb-1 text-[#1c1c1c] transition-colors "
-          placeholder="Role / Degree"
+          placeholder={t('editor.listBlock.roleTitlePlaceholder')}
         />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <input
@@ -195,7 +199,7 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
             onChange={subtitleInput.onChange}
             onBlur={subtitleInput.onBlur}
             className="w-full bg-transparent border-b border-[#eceae4] focus:border-accent outline-none text-xs tracking-widest pb-1 text-[#5f5f5d] transition-colors "
-            placeholder="Company / Institution"
+            placeholder={t('editor.listBlock.subtitlePlaceholder')}
           />
           <input
             ref={periodInput.ref as React.Ref<HTMLInputElement>}
@@ -203,7 +207,7 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
             onChange={periodInput.onChange}
             onBlur={periodInput.onBlur}
             className="w-full bg-transparent border-b border-[#eceae4] focus:border-accent outline-none text-xs tracking-widest pb-1 text-[#5f5f5d] transition-colors "
-            placeholder="Period (e.g. 2021 - Present)"
+            placeholder={t('editor.listBlock.dateRangePlaceholder')}
           />
         </div>
         <textarea
@@ -218,7 +222,7 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
           onBlur={descInput.onBlur}
           className="w-full mt-4 bg-[#f9f8f5] border border-[#eceae4] text-[#1c1c1c] rounded-xl p-4 text-sm focus:border-accent/50 outline-none resize-none transition-colors overflow-hidden"
           rows={3}
-          placeholder="Description..."
+          placeholder={t('editor.listBlock.descriptionPlaceholder')}
         />
       </div>
     </div>

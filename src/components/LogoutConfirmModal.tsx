@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { LogOut, X } from 'lucide-react';
 
 interface LogoutConfirmModalProps {
@@ -15,6 +16,7 @@ export default function LogoutConfirmModal({
   onConfirm,
   theme = 'dark'
 }: LogoutConfirmModalProps) {
+  const { t } = useTranslation();
   if (!isOpen) return null;
 
   const isDark = theme === 'dark';
@@ -44,7 +46,7 @@ export default function LogoutConfirmModal({
         <div className={`p-5 border-b flex items-center justify-between ${isDark ? 'border-[#eceae4]' : 'border-gray-100'}`}>
           <h2 className={`text-lg font-semibold flex items-center gap-2 ${isDark ? 'text-gray-900' : 'text-gray-900'}`}>
             <LogOut className={`w-5 h-5 ${isDark ? 'text-accent' : 'text-gray-900'}`} />
-            Confirm Logout
+            {t('common.logoutModal.title')}
           </h2>
           <button 
             onClick={onClose}
@@ -66,10 +68,10 @@ export default function LogoutConfirmModal({
           </div>
           
           <h3 className={`text-xl font-medium mb-2 ${isDark ? 'text-gray-900' : 'text-gray-900'}`}>
-            Ready to leave?
+            {t('common.logoutModal.ready')}
           </h3>
           <p className={`text-sm mb-8 ${isDark ? 'text-text-secondary' : 'text-gray-600'}`}>
-            You are about to log out of your account. You will need to log back in to access your resumes.
+            {t('common.logoutModal.desc')}
           </p>
 
           <div className="flex gap-3 w-full">
@@ -81,7 +83,7 @@ export default function LogoutConfirmModal({
                   : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
               }`}
             >
-              Cancel
+              {t('common.logoutModal.cancel')}
             </button>
             <button
               onClick={onConfirm}
@@ -91,7 +93,7 @@ export default function LogoutConfirmModal({
                   : 'bg-gray-900 hover:bg-gray-800'
               }`}
             >
-              Log Out
+              {t('common.logoutModal.confirm')}
             </button>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import React, { KeyboardEvent, useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Droppable, Draggable } from '@hello-pangea/dnd';
 import * as LucideIcons from 'lucide-react';
 import isEqual from 'fast-deep-equal';
@@ -24,7 +25,7 @@ const TagsBlockEditor = React.memo(({
   isMobile,
   reorderTagItems
 }: TagsBlockEditorProps) => {
-
+  const { t } = useTranslation();
   const titleInput = useDebouncedInput(block.title, (val) => updateBlockTitle(block.id, val));
   const [newTitle, setNewTitle] = useState('');
   const [newDesc, setNewDesc] = useState('');
@@ -91,14 +92,14 @@ const TagsBlockEditor = React.memo(({
             value={newTitle}
             onChange={e => setNewTitle(e.target.value)}
             onKeyDown={handleTagKeyDown}
-            placeholder="Category (e.g., Tools)"
+            placeholder={t('editor.tagsBlock.categoryPlaceholder')}
             className="bg-transparent border-b border-[#eceae4] focus:border-accent outline-none text-sm tracking-wide px-1 pb-1 transition-colors text-[#5f5f5d] w-full"
           />
           <input
             value={newDesc}
             onChange={e => setNewDesc(e.target.value)}
             onKeyDown={handleTagKeyDown}
-            placeholder="Skills (e.g., Git, Docker) (Press Enter)"
+            placeholder={t('editor.tagsBlock.tagsPlaceholder')}
             className="bg-transparent border-b border-[#eceae4] focus:border-accent outline-none text-sm tracking-wide px-1 pb-1 transition-colors text-[#5f5f5d] w-full"
           />
         </div>
@@ -123,6 +124,7 @@ interface TagItemEditorProps {
 }
 
 const TagItemEditor = React.memo(({ provided, snapshot, blockId, item, index, totalItems, updateTagItem, removeTagItem, isMobile, reorderTagItems }: TagItemEditorProps) => {
+  const { t } = useTranslation();
   const initialParts = item.text.split(':');
   const initialTitle = initialParts[0] || '';
   const initialDesc = initialParts.length > 1 ? initialParts.slice(1).join(':').trim() : '';
@@ -194,7 +196,7 @@ const TagItemEditor = React.memo(({ provided, snapshot, blockId, item, index, to
           defaultValue={titleInput.defaultValue}
           onChange={titleInput.onChange}
           onBlur={titleInput.onBlur}
-          placeholder="Category (e.g., Programming)"
+          placeholder={t('editor.tagsBlock.category')}
           className="bg-transparent border-b border-[#eceae4] hover:border-[#1c1c1c]/20 focus:border-accent outline-none text-base font-medium tracking-wide text-[#1c1c1c] transition-colors pb-1 w-full"
         />
         <input
@@ -202,7 +204,7 @@ const TagItemEditor = React.memo(({ provided, snapshot, blockId, item, index, to
           defaultValue={descInput.defaultValue}
           onChange={descInput.onChange}
           onBlur={descInput.onBlur}
-          placeholder="Skills (e.g., Python, JS, React)"
+          placeholder={t('editor.tagsBlock.tags')}
           className="bg-transparent border-b border-[#eceae4] hover:border-[#1c1c1c]/20 focus:border-accent outline-none text-base tracking-wide text-[#5f5f5d] transition-colors pb-1 w-full"
         />
       </div>
@@ -215,7 +217,7 @@ const TagItemEditor = React.memo(({ provided, snapshot, blockId, item, index, to
           }}
           className="px-2.5 py-1 bg-red-500 text-white text-xs rounded-lg font-medium hover:bg-red-600 transition-all self-end md:self-center shrink-0 shadow-sm mt-1 md:mt-0"
         >
-          Confirm?
+          {t('common.confirm')}
         </button>
       ) : (
         <button 

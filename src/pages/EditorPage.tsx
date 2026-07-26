@@ -13,11 +13,13 @@ import { copyTextToClipboard } from '../lib/utils';
 import DesktopEditLayout from '../components/editor/DesktopEditLayout';
 import MobileEditLayout from '../components/editor/MobileEditLayout';
 import { EditorLayoutProps } from '../components/editor/EditorLayoutProps';
+import { useTranslation } from 'react-i18next';
 
 export default function EditorPage() {
   useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user, signOut, isPro, isAdmin } = useAuth();
+  const { t } = useTranslation();
   
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
@@ -50,7 +52,7 @@ export default function EditorPage() {
   useEffect(() => {
     if (location.state?.openImport) {
       if (!isPro && !isAdmin && Object.keys(appState.profiles).length >= 3) {
-        alert("You have reached the maximum number of 3 resumes for non-pro users. Please upgrade to Pro or delete an existing resume to import a new one.");
+        alert(t('editor.alerts.limitReached'));
       } else {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsImportModalOpen(true);
@@ -136,7 +138,7 @@ export default function EditorPage() {
       localStorage.setItem('RESUME_PRINT_DATA', JSON.stringify(profileData));
       const printWindow = window.open('/view?print=true', '_blank');
       if (!printWindow) {
-        alert("Please allow popups to generate the PDF.");
+        alert(t('editor.alerts.allowPopups'));
         return;
       }
       const intervalId = setInterval(() => {
@@ -287,7 +289,7 @@ export default function EditorPage() {
         <div className="depth-bg animated" />
         <div className="bg-white p-8 rounded-2xl flex flex-col items-center gap-4 border border-[#eceae4] shadow-xl">
           <LucideIcons.Loader2 className="w-8 h-8 animate-spin text-accent" />
-          <p className="text-[#5f5f5d] text-xs tracking-widest font-medium">Loading your profiles...</p>
+          <p className="text-[#5f5f5d] text-xs tracking-widest font-medium">{t('editor.loadingProfiles')}</p>
         </div>
       </div>
     );
@@ -319,7 +321,7 @@ export default function EditorPage() {
         onClose={() => setIsImportModalOpen(false)}
         onImport={(parsedData) => {
           if (!isPro && !isAdmin && Object.keys(appState.profiles).length >= 3) {
-            alert("You have reached the maximum number of 3 resumes for non-pro users. Please upgrade to Pro or delete an existing resume to import a new one.");
+            alert(t('editor.alerts.limitReached'));
             return;
           }
           importResumeProfile(

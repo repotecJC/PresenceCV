@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as LucideIcons from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -25,6 +26,7 @@ const ProfileSwitcher = React.memo(({
   isPro,
   isAdmin,
 }: ProfileSwitcherProps) => {
+  const { t } = useTranslation();
   const [editingProfileId, setEditingProfileId] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -55,11 +57,11 @@ const ProfileSwitcher = React.memo(({
     <div className="relative z-[60] w-full" ref={dropdownRef}>
       <button 
         onClick={() => setIsOpen(!isOpen)} 
-        className={`p-2 rounded-2xl lg:rounded-full flex items-center justify-between gap-2 lg:gap-4 w-full bg-white/50 hover:bg-white transition-colors border border-[#eceae4] shadow-sm group ${isCollapsed ? 'lg:p-2 lg:justify-center lg:rounded-2xl' : 'px-3 py-1.5 lg:px-5 lg:py-3'}`}
+        className={`p-2 rounded-2xl lg:rounded-full flex items-center justify-between gap-2 lg:gap-4 w-full bg-white/50 hover:bg-white transition-colors border border-[#eceae4] shadow-sm group ${isCollapsed ? 'lg:p-3 lg:justify-center lg:rounded-2xl' : 'px-3 py-1.5 lg:px-5 lg:py-3'}`}
       >
         <div className="flex items-center gap-2 lg:gap-3 min-w-0 flex-1">
           <LucideIcons.FileText className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-accent shrink-0" />
-          <span className={`text-xs lg:text-sm tracking-widest truncate font-medium text-[#1c1c1c] ${isCollapsed ? 'hidden' : 'inline-block'}`}>{activeProfile?.name || 'Resume'}</span>
+          <span className={`text-xs lg:text-sm tracking-widest truncate font-medium text-[#1c1c1c] ${isCollapsed ? 'hidden' : 'inline-block'}`}>{activeProfile?.name || t('editor.profileSwitcher.defaultName')}</span>
         </div>
         <LucideIcons.ChevronDown className={`w-3.5 h-3.5 lg:w-4 lg:h-4 text-[#5f5f5d] transition-transform shrink-0 ${isCollapsed ? 'hidden' : 'inline-block'} ${isOpen ? 'rotate-180' : ''}`} />
       </button>
@@ -76,16 +78,16 @@ const ProfileSwitcher = React.memo(({
             <button
               onClick={() => {
                 if (!isPro && !isAdmin && Object.keys(profiles).length >= 3) {
-                  alert("You have reached the maximum number of 3 resumes for non-pro users. Please upgrade to Pro or delete an existing resume to copy.");
+                  alert(t('editor.profileSwitcher.limitReached'));
                   return;
                 }
-                createProfile('New Resume');
+                createProfile(t('editor.profileSwitcher.newProfileName'));
                 setIsOpen(false);
               }}
               className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-black/5 transition-colors text-[#5f5f5d] hover:text-[#1c1c1c] group"
             >
               <LucideIcons.Copy className="w-4 h-4 group-hover:text-accent transition-colors" />
-              <span className="text-sm tracking-widest font-medium">Copy Current Profile</span>
+              <span className="text-sm tracking-widest font-medium">{t('editor.profileSwitcher.createNew')}</span>
             </button>
             
             <div className="w-full h-px bg-[#eceae4] my-1" />
@@ -140,7 +142,7 @@ const ProfileSwitcher = React.memo(({
                         setEditingProfileId(profile.id);
                       }}
                       className="p-1.5 rounded-lg text-[#5f5f5d] hover:text-[#1c1c1c] hover:bg-black/10 transition-colors"
-                      title="Rename Profile"
+                      title={t('editor.profileSwitcher.rename')}
                     >
                       <LucideIcons.Edit2 className="w-3.5 h-3.5" />
                     </button>
@@ -151,7 +153,7 @@ const ProfileSwitcher = React.memo(({
                           setProfileToDelete(profile.id);
                         }}
                         className="p-1.5 rounded-lg text-red-400 hover:text-red-500 hover:bg-red-50 transition-colors"
-                        title="Delete Profile"
+                        title={t('editor.profileSwitcher.delete')}
                       >
                         <LucideIcons.Trash2 className="w-3.5 h-3.5" />
                       </button>

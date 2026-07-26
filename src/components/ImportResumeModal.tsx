@@ -26,6 +26,7 @@
  * Firestore reads/writes: user_limits/{uid}
  */
 import React, { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'motion/react';
 import { Upload, X, FileText, Loader2, AlertCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -39,6 +40,7 @@ interface ImportResumeModalProps {
 }
 
 export const ImportResumeModal: React.FC<ImportResumeModalProps> = ({ isOpen, onClose, onImport }) => {
+  const { t } = useTranslation();
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -50,14 +52,14 @@ export const ImportResumeModal: React.FC<ImportResumeModalProps> = ({ isOpen, on
 
     // Validate size (max 3MB for Vercel Free Tier compatibility)
     if (file.size > 3 * 1024 * 1024) {
-      setError("File is too large. Maximum size is 3MB.");
+      setError(t('importModal.errors.fileTooLarge'));
       return;
     }
 
     // Validate type
     const validTypes = ['application/pdf', 'image/jpeg', 'image/png'];
     if (!validTypes.includes(file.type)) {
-      setError("Invalid file type. Only PDF, JPG, and PNG are supported.");
+      setError(t('importModal.errors.invalidType'));
       return;
     }
 
@@ -66,12 +68,12 @@ export const ImportResumeModal: React.FC<ImportResumeModalProps> = ({ isOpen, on
       setError(null);
 
       if (!user) {
-        throw new Error("You must be logged in to use this feature.");
+        throw new Error(t('importModal.errors.notLoggedIn'));
       }
 
       const idToken = await auth.currentUser?.getIdToken();
       if (!idToken) {
-        throw new Error("Failed to get authentication token.");
+        throw new Error(t('importModal.errors.authFailed'));
       }
 
       // Convert file to Base64
@@ -79,7 +81,7 @@ export const ImportResumeModal: React.FC<ImportResumeModalProps> = ({ isOpen, on
       reader.readAsDataURL(file);
       await new Promise<void>((resolve, reject) => {
         reader.onload = () => resolve();
-        reader.onerror = () => reject(new Error("Failed to read file."));
+        reader.onerror = () => reject(new Error(t('importModal.errors.readFailed')));
       });
 
       const base64String = reader.result as string;
@@ -108,7 +110,7 @@ export const ImportResumeModal: React.FC<ImportResumeModalProps> = ({ isOpen, on
         
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.error || `Server error: ${response.status}`);
+          throw new Error(errorData.error || `${t('common.error')}: ${response.status}`);
         }
 
         parsedData = await response.json();
@@ -118,7 +120,7 @@ export const ImportResumeModal: React.FC<ImportResumeModalProps> = ({ isOpen, on
         }
 
         console.warn('Server-side parsing unavailable (412). No client-side fallback configured.');
-        throw new Error('AI service unavailable. Please ensure the server is configured with a valid API key.', { cause: backendError });
+        throw new Error(t('importModal.errors.serverUnavailable'), { cause: backendError });
       }
 
       onImport(parsedData);
@@ -126,7 +128,7 @@ export const ImportResumeModal: React.FC<ImportResumeModalProps> = ({ isOpen, on
     } catch (err: any) {
       console.error("Upload Error:", err);
       // Show friendly error from server or default fallback
-      setError(err.message || "An unexpected error occurred during upload.");
+      setError(err.message || t('importModal.errors.unexpected'));
     } finally {
       setIsUploading(false);
       // Reset input
@@ -156,7 +158,7 @@ export const ImportResumeModal: React.FC<ImportResumeModalProps> = ({ isOpen, on
             <div className="p-6 border-b border-[#eceae4] flex items-center justify-between">
               <h2 className="text-xl font-semibold text-[#1c1c1c] flex items-center gap-2">
                 <FileText className="w-5 h-5 text-accent" />
-                Upload Your Resume
+                {t('importModal.title')}
               </h2>
               <button 
                 onClick={onClose}
@@ -169,8 +171,7 @@ export const ImportResumeModal: React.FC<ImportResumeModalProps> = ({ isOpen, on
 
             <div className="p-6">
               <p className="text-[#5f5f5d] mb-6 text-sm text-center">
-                Upload your existing resume (PDF, JPG, or PNG) and our AI will automatically extract and populate your profile. 
-                <br /> <span className="text-xs text-[#5f5f5d]/70 mt-1 block">(Limit 5 times per day)</span>
+                {t('importModal.subtitle')}
               </p>
 
               {error && (
@@ -189,16 +190,15 @@ export const ImportResumeModal: React.FC<ImportResumeModalProps> = ({ isOpen, on
                 {isUploading ? (
                   <div className="flex flex-col items-center gap-3">
                     <Loader2 className="w-8 h-8 text-accent animate-spin" />
-                    <p className="text-sm font-medium text-[#1c1c1c]">AI is analyzing your resume...</p>
-                    <p className="text-xs text-[#5f5f5d]">This might take up to 30 seconds.</p>
+                    <p className="text-sm font-medium text-[#1c1c1c]">{t('importModal.parsing')}</p>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center gap-2">
                     <div className="w-12 h-12 bg-[#eceae4]/50 rounded-full flex items-center justify-center shadow-sm mb-2 text-accent">
                       <Upload className="w-6 h-6" />
                     </div>
-                    <p className="text-sm font-medium text-[#1c1c1c]">Click to upload document</p>
-                    <p className="text-xs text-[#5f5f5d]">Max 3MB. Fast and secure.</p>
+                    <p className="text-sm font-medium text-[#1c1c1c]">{t('importModal.dropzoneText')}</p>
+                    <p className="text-xs text-[#5f5f5d]">{t('importModal.supportedFormats')}</p>
                   </div>
                 )}
                 
@@ -214,7 +214,7 @@ export const ImportResumeModal: React.FC<ImportResumeModalProps> = ({ isOpen, on
               <div className="mt-6 p-4 bg-accent/10 rounded-lg border border-accent/20 flex gap-2 w-full items-start">
                   <AlertCircle className="w-4 h-4 text-accent mt-0.5 shrink-0" />
                   <p className="text-xs text-[#5f5f5d] leading-relaxed">
-                    <strong className="text-[#1c1c1c]">Privacy Notice:</strong> Your file is processed securely in memory and deleted immediately after analysis. We do not store your original document. Please manually review the generated content after upload to ensure AI accuracy.
+                    {t('importModal.privacyNotice')}
                   </p>
               </div>
             </div>

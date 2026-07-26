@@ -19,13 +19,16 @@
  * Depends on: AuthContext (useAuth), react-router-dom, lucide-react, motion
  */
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'motion/react';
 import * as LucideIcons from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import LogoutConfirmModal from '../components/LogoutConfirmModal';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 export default function HomePage() {
+  const { t } = useTranslation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const { user, signInWithGoogle, signOut } = useAuth();
@@ -73,16 +76,17 @@ export default function HomePage() {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-[#5f5f5d] hover:text-[#1c1c1c] transition-colors text-sm font-medium">Features</a>
-            <a href="#pricing" className="text-[#5f5f5d] hover:text-[#1c1c1c] transition-colors text-sm font-medium">Pricing</a>
+            <a href="#features" className="text-[#5f5f5d] hover:text-[#1c1c1c] transition-colors text-sm font-medium">{t('home.nav.features')}</a>
+            <a href="#pricing" className="text-[#5f5f5d] hover:text-[#1c1c1c] transition-colors text-sm font-medium">{t('home.nav.pricing')}</a>
           </div>
 
           <div className="hidden md:flex items-center gap-4">
+            <LanguageSwitcher fullWidth={false} />
             <button 
               onClick={handleLogin}
               className="text-[#1c1c1c] bg-transparent border border-[#1c1c1c]/40 rounded-md px-4 py-2 text-sm font-medium hover:opacity-80 transition-opacity"
             >
-              {user ? 'Resume Editor' : 'Log In'}
+              {user ? t('home.nav.resumeEditor') : t('home.nav.login')}
             </button>
             {user && (
               <div className="flex items-center gap-3 pl-4 border-l border-[#eceae4]">
@@ -98,7 +102,7 @@ export default function HomePage() {
                   className="bg-[#1c1c1c] text-[#fcfbf8] rounded-md px-4 py-2 text-sm font-medium hover:opacity-80 transition-opacity"
                   style={{ boxShadow: 'rgba(255,255,255,0.2) 0px 0.5px 0px 0px inset, rgba(0,0,0,0.2) 0px 0px 0px 0.5px inset, rgba(0,0,0,0.05) 0px 1px 2px 0px' }}
                 >
-                  Log Out
+                  {t('common.logout')}
                 </button>
               </div>
             )}
@@ -123,14 +127,15 @@ export default function HomePage() {
               className="md:hidden border-b border-[#eceae4] bg-[#f7f4ed] overflow-hidden"
             >
               <div className="flex flex-col p-6 gap-4">
-                <a href="#features" onClick={() => setIsMobileMenuOpen(false)} className="text-[#5f5f5d] font-medium">Features</a>
-                <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="text-[#5f5f5d] font-medium">Pricing</a>
+                <LanguageSwitcher fullWidth={false} />
+                <a href="#features" onClick={() => setIsMobileMenuOpen(false)} className="text-[#5f5f5d] font-medium">{t('home.nav.features')}</a>
+                <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="text-[#5f5f5d] font-medium">{t('home.nav.pricing')}</a>
                 <hr className="border-[#eceae4]" />
                 <button 
                   onClick={() => { setIsMobileMenuOpen(false); handleLogin(); }}
                   className="w-full text-center text-[#1c1c1c] bg-transparent border border-[#1c1c1c]/40 rounded-md px-4 py-2 text-sm font-medium hover:opacity-80"
                 >
-                  {user ? 'Resume Editor' : 'Log In'}
+                  {user ? t('home.nav.resumeEditor') : t('home.nav.login')}
                 </button>
                 {user && (
                    <div className="flex flex-col gap-4 pt-4 mt-2 border-t border-[#eceae4]">
@@ -142,14 +147,14 @@ export default function HomePage() {
                            <LucideIcons.User className="w-4 h-4 text-[#1c1c1c]" />
                          </div>
                        )}
-                       <span className="text-sm font-medium text-[#1c1c1c]">{user.email || 'User'}</span>
+                       <span className="text-sm font-medium text-[#1c1c1c]">{user.email || t('common.user')}</span>
                      </div>
                      <button 
                        onClick={() => { setIsMobileMenuOpen(false); handleLogout(); }}
                        className="w-full text-center bg-[#1c1c1c] text-[#fcfbf8] rounded-md px-4 py-2 text-sm font-medium hover:opacity-80"
                        style={{ boxShadow: 'rgba(255,255,255,0.2) 0px 0.5px 0px 0px inset, rgba(0,0,0,0.2) 0px 0px 0px 0.5px inset, rgba(0,0,0,0.05) 0px 1px 2px 0px' }}
                      >
-                       Log Out
+                       {t('common.logout')}
                      </button>
                    </div>
                 )}
@@ -179,7 +184,7 @@ export default function HomePage() {
               Your Resume <br className="hidden md:block" /> Your Presence
             </h1>
             <p className="text-[20px] md:text-[24px] text-[#5f5f5d] leading-[1.38] mb-12 max-w-2xl font-normal">
-              Build stunning, shareable resumes powered by AI — in seconds.
+              {t('home.hero.subtitle')}
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-4">
               <button 
@@ -187,7 +192,7 @@ export default function HomePage() {
                 className="w-full sm:w-auto bg-[#1c1c1c] text-[#fcfbf8] rounded-md px-8 py-4 text-lg font-medium hover:opacity-80 transition-opacity"
                 style={{ boxShadow: 'rgba(255,255,255,0.2) 0px 0.5px 0px 0px inset, rgba(0,0,0,0.2) 0px 0px 0px 0.5px inset, rgba(0,0,0,0.05) 0px 1px 2px 0px' }}
               >
-                Start Building Now
+                {t('home.hero.ctaStart')}
               </button>
             </div>
           </motion.div>
@@ -198,8 +203,8 @@ export default function HomePage() {
       <section id="features" className="py-24 md:py-40 px-6 bg-gradient-to-b from-[#f7f4ed] to-white">
         <div className="max-w-7xl mx-auto">
           <div className="mb-20 text-center">
-            <h2 className="text-4xl md:text-[56px] font-semibold leading-[1.0] tracking-[-1.5px] mb-6">Why PresenceCV?</h2>
-            <p className="text-[20px] text-[#5f5f5d]">Everything you need to showcase your best self.</p>
+            <h2 className="text-4xl md:text-[56px] font-semibold leading-[1.0] tracking-[-1.5px] mb-6">{t('home.features.whyTitle')}</h2>
+            <p className="text-[20px] text-[#5f5f5d]">{t('home.features.heading')}</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -207,32 +212,32 @@ export default function HomePage() {
               <div className="p-4 bg-white rounded-2xl border border-[#eceae4] shadow-sm mb-8">
                 <LucideIcons.Cloud className="w-7 h-7 text-[#1c1c1c]" />
               </div>
-              <h3 className="text-[22px] font-semibold leading-[1.2] mb-4 text-[#1c1c1c]">Manage in One Account</h3>
-              <p className="text-[17px] text-[#5f5f5d] leading-[1.6]">Log in from anywhere to instantly generate, manage, and present your resume across any device. Your professional presence, always accessible.</p>
+              <h3 className="text-[22px] font-semibold leading-[1.2] mb-4 text-[#1c1c1c]">{t('home.features.manageTitle')}</h3>
+              <p className="text-[17px] text-[#5f5f5d] leading-[1.6]">{t('home.features.manageDesc')}</p>
             </div>
             
             <div className="bg-white/60 backdrop-blur-sm border border-[#eceae4] p-10 rounded-3xl flex flex-col items-start transition-all hover:shadow-xl hover:-translate-y-2">
               <div className="p-4 bg-white rounded-2xl border border-[#eceae4] shadow-sm mb-8">
                 <LucideIcons.Share2 className="w-7 h-7 text-[#1c1c1c]" />
               </div>
-              <h3 className="text-[22px] font-semibold leading-[1.2] mb-4 text-[#1c1c1c]">Live Share Link</h3>
-              <p className="text-[17px] text-[#5f5f5d] leading-[1.6]">Found a typo after sending the link? No problem. Edits update in real-time, ensuring recruiters always see your perfect, up-to-date professional profile.</p>
+              <h3 className="text-[22px] font-semibold leading-[1.2] mb-4 text-[#1c1c1c]">{t('home.features.liveTitle')}</h3>
+              <p className="text-[17px] text-[#5f5f5d] leading-[1.6]">{t('home.features.liveDesc')}</p>
             </div>
 
             <div className="bg-white/60 backdrop-blur-sm border border-[#eceae4] p-10 rounded-3xl flex flex-col items-start transition-all hover:shadow-xl hover:-translate-y-2">
               <div className="p-4 bg-white rounded-2xl border border-[#eceae4] shadow-sm mb-8">
                 <LucideIcons.FileText className="w-7 h-7 text-[#1c1c1c]" />
               </div>
-              <h3 className="text-[22px] font-semibold leading-[1.2] mb-4 text-[#1c1c1c]">ATS-Optimized PDF</h3>
-              <p className="text-[17px] text-[#5f5f5d] leading-[1.6]">Skip the confusing, overly-decorated layouts. We provide a single, clean format built to be easily read by recruiters and perfectly parsed by ATS scanners.</p>
+              <h3 className="text-[22px] font-semibold leading-[1.2] mb-4 text-[#1c1c1c]">{t('home.features.pdfTitle')}</h3>
+              <p className="text-[17px] text-[#5f5f5d] leading-[1.6]">{t('home.features.pdfDesc')}</p>
             </div>
 
             <div className="bg-white/60 backdrop-blur-sm border border-[#eceae4] p-10 rounded-3xl flex flex-col items-start transition-all hover:shadow-xl hover:-translate-y-2">
               <div className="p-4 bg-white rounded-2xl border border-[#eceae4] shadow-sm mb-8">
                 <LucideIcons.Bot className="w-7 h-7 text-[#1c1c1c]" />
               </div>
-              <h3 className="text-[22px] font-semibold leading-[1.2] mb-4 text-[#1c1c1c]">AI Job-Hunting Sidekick</h3>
-              <p className="text-[17px] text-[#5f5f5d] leading-[1.6]"><span className="text-blue-500 font-semibold text-[11px] tracking-wider uppercase mr-2 border border-blue-200 bg-blue-50 px-1.5 py-0.5 rounded-sm">Coming Soon</span>AI that tailors your resume, matches JDs, writes cover letters, and fully automates applying to LinkedIn and other top job platforms.</p>
+              <h3 className="text-[22px] font-semibold leading-[1.2] mb-4 text-[#1c1c1c]">{t('home.features.aiJobHuntingTitle')}</h3>
+              <p className="text-[17px] text-[#5f5f5d] leading-[1.6]"><span className="text-blue-500 font-semibold text-[11px] tracking-wider uppercase mr-2 border border-blue-200 bg-blue-50 px-1.5 py-0.5 rounded-sm">{t('home.pricing.comingSoon')}</span>{t('home.features.aiJobHuntingDesc')}</p>
             </div>
           </div>
         </div>
@@ -241,19 +246,19 @@ export default function HomePage() {
       {/* Pricing Section - Pure White Background */}
       <section id="pricing" className="py-32 md:py-48 px-6 bg-white text-center">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-[48px] font-semibold leading-[1.0] tracking-[-1.2px] mb-4">Early Access: Free for all</h2>
-          <p className="text-[18px] text-[#5f5f5d] mb-16">Start building your resume immediately.</p>
+          <h2 className="text-3xl md:text-[48px] font-semibold leading-[1.0] tracking-[-1.2px] mb-4">{t('home.pricing.title')}</h2>
+          <p className="text-[18px] text-[#5f5f5d] mb-16">{t('home.pricing.subtitle')}</p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left max-w-3xl mx-auto">
             <div className="bg-[#f7f4ed] border border-[#eceae4] p-8 rounded-2xl flex flex-col">
-              <h3 className="text-[24px] font-semibold mb-2">Free</h3>
-              <p className="text-[#5f5f5d] mb-6">Everything you need to land an interview.</p>
-              <div className="text-[36px] font-semibold tracking-tight mb-8">$0<span className="text-[18px] font-normal text-[#5f5f5d]">/mo</span></div>
+              <h3 className="text-[24px] font-semibold mb-2">{t('home.pricing.free.name')}</h3>
+              <p className="text-[#5f5f5d] mb-6">{t('home.pricing.free.desc')}</p>
+              <div className="text-[36px] font-semibold tracking-tight mb-8">{t('home.pricing.free.price')}<span className="text-[18px] font-normal text-[#5f5f5d]">{t('home.pricing.free.period')}</span></div>
               <ul className="space-y-4 mb-8 flex-1">
-                <li className="flex items-center gap-3"><LucideIcons.Check className="w-5 h-5 text-[#1c1c1c]" /> 3 resume profiles</li>
-                <li className="flex items-center gap-3"><LucideIcons.Check className="w-5 h-5 text-[#1c1c1c]" /> Unlimited PDF export</li>
-                <li className="flex items-center gap-3"><LucideIcons.Check className="w-5 h-5 text-[#1c1c1c]" /> Unlimited live & snapshot link sharing</li>
-                <li className="flex items-center gap-3 text-left"><LucideIcons.Check className="w-5 h-5 text-[#1c1c1c] shrink-0" /> <span>10 AI fully auto job appling / day <span className="text-xs font-semibold text-blue-500 block sm:inline">(Coming soon)</span></span></li>
+                <li className="flex items-center gap-3"><LucideIcons.Check className="w-5 h-5 text-[#1c1c1c]" /> {t('home.pricing.free.features.profiles')}</li>
+                <li className="flex items-center gap-3"><LucideIcons.Check className="w-5 h-5 text-[#1c1c1c]" /> {t('home.pricing.free.features.pdf')}</li>
+                <li className="flex items-center gap-3"><LucideIcons.Check className="w-5 h-5 text-[#1c1c1c]" /> {t('home.pricing.free.features.share')}</li>
+                <li className="flex items-center gap-3 text-left"><LucideIcons.Check className="w-5 h-5 text-[#1c1c1c] shrink-0" /> <span>{t('home.pricing.free.features.ai')} <span className="text-xs font-semibold text-blue-500 block sm:inline">({t('home.pricing.comingSoon')})</span></span></li>
               </ul>
               <button 
                 onClick={handleGetStarted}
@@ -267,15 +272,22 @@ export default function HomePage() {
               <div className="absolute top-0 right-8 -translate-y-1/2 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
                 Coming Soon
               </div>
-              <h3 className="text-[24px] font-semibold mb-2 text-[#fcfbf8]">Pro</h3>
-              <p className="opacity-80 mb-6 text-[16px]">For power users and active job seekers.</p>
-              <div className="text-[36px] font-semibold tracking-tight mb-8 text-[#fcfbf8]">$5<span className="text-[18px] font-normal opacity-80">/mo</span></div>
+              <h3 className="text-[24px] font-semibold mb-2 text-[#fcfbf8]">{t('home.pricing.pro.name')}</h3>
+              <p className="opacity-80 mb-6 text-[16px]">{t('home.pricing.pro.desc')}</p>
+              <div className="text-[36px] font-semibold tracking-tight mb-8 text-[#fcfbf8]">
+                <span className="line-through text-gray-400 text-[24px] font-normal mr-3">$10 USD</span>
+                {t('home.pricing.pro.price')}
+                <span className="text-[18px] font-normal opacity-80 ml-1">{t('home.pricing.pro.period')}</span>
+                <div className="inline-block align-middle ml-4 -mt-1">
+                  <span className="text-[13px] font-bold text-yellow-300 bg-yellow-500/20 px-2.5 py-1 rounded-md border border-yellow-500/30 whitespace-nowrap">{t('home.pricing.pro.discount')}</span>
+                </div>
+              </div>
               <ul className="space-y-4 mb-8 flex-1">
-                <li className="flex items-center gap-3"><LucideIcons.Check className="w-5 h-5" /> Unlimited profiles</li>
-                <li className="flex items-center gap-3"><LucideIcons.Check className="w-5 h-5" /> Unlimited PDF export without watermark</li>
-                <li className="flex items-center gap-3"><LucideIcons.Check className="w-5 h-5" /> Unlimited live & snapshot link sharing</li>
-                <li className="flex items-center gap-3 text-left"><LucideIcons.Check className="w-5 h-5 shrink-0" /> <span>50 AI schedule & customized fully auto job appling / day <span className="text-xs font-semibold text-blue-400 block sm:inline">(Coming soon)</span></span></li>
-                <li className="flex items-center gap-3 text-left"><LucideIcons.Check className="w-5 h-5 shrink-0" /> <span>Latest AI-powered job hunting functions <span className="text-xs font-semibold text-blue-400 block sm:inline">(Coming soon)</span></span></li>
+                <li className="flex items-center gap-3"><LucideIcons.Check className="w-5 h-5" /> {t('home.pricing.pro.features.profiles')}</li>
+                <li className="flex items-center gap-3"><LucideIcons.Check className="w-5 h-5" /> {t('home.pricing.pro.features.pdf')}</li>
+                <li className="flex items-center gap-3"><LucideIcons.Check className="w-5 h-5" /> {t('home.pricing.pro.features.share')}</li>
+                <li className="flex items-center gap-3 text-left"><LucideIcons.Check className="w-5 h-5 shrink-0" /> <span>{t('home.pricing.pro.features.ai')} <span className="text-xs font-semibold text-blue-400 block sm:inline">({t('home.pricing.comingSoon')})</span></span></li>
+                <li className="flex items-center gap-3 text-left"><LucideIcons.Check className="w-5 h-5 shrink-0" /> <span>{t('home.pricing.pro.features.advanced')} <span className="text-xs font-semibold text-blue-400 block sm:inline">({t('home.pricing.comingSoon')})</span></span></li>
               </ul>
               <button className="w-full text-center bg-white text-[#1c1c1c] rounded-md px-6 py-3 text-base font-medium opacity-50 cursor-not-allowed">
                 Get Started
@@ -292,14 +304,14 @@ export default function HomePage() {
             <div className="flex items-center gap-2">
               <img src="/favicon.png" className="w-5 h-5 rounded-full" style={{ mixBlendMode: 'multiply' }} alt="PresenceCV Logo" />
               <span className="font-semibold text-[#1c1c1c]">PresenceCV</span>
-              <span className="text-[#5f5f5d] ml-2">© 2026 PresenceCV</span>
+              <span className="text-[#5f5f5d] ml-2">{t('home.footer.copyright')}</span>
             </div>
-            <p className="text-[#5f5f5d] text-xs">Crafted with care by independent developer Joe.</p>
+            <p className="text-[#5f5f5d] text-xs">{t('home.footer.tagline')}</p>
           </div>
           <div className="flex gap-6 text-[#5f5f5d]">
-            <a href="#features" className="hover:text-[#1c1c1c] transition-colors">Features</a>
-            <Link to="/privacy" className="hover:text-[#1c1c1c] transition-colors">Privacy</Link>
-            <Link to="/terms" className="hover:text-[#1c1c1c] transition-colors">Terms</Link>
+            <a href="#features" className="hover:text-[#1c1c1c] transition-colors">{t('home.nav.features')}</a>
+            <Link to="/privacy" className="hover:text-[#1c1c1c] transition-colors">{t('home.footer.privacy')}</Link>
+            <Link to="/terms" className="hover:text-[#1c1c1c] transition-colors">{t('home.footer.terms')}</Link>
           </div>
         </div>
       </footer>
