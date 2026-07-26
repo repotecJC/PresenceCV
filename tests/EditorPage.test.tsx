@@ -16,6 +16,12 @@ vi.mock('../src/contexts/AuthContext', () => ({
   useAuth: vi.fn()
 }));
 
+vi.mock('../src/lib/firebase', () => ({
+  auth: {},
+  db: {}
+}));
+
+
 const mockAlert = vi.spyOn(window, 'alert').mockImplementation(() => {});
 
 describe('Editor UI limits', () => {
