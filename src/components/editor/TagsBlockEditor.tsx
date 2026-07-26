@@ -9,7 +9,7 @@ import { useDebouncedInput } from './InfoEditor';
 interface TagsBlockEditorProps {
   block: any;
   updateBlockTitle: (blockId: string, title: string) => void;
-  updateTagItem: (blockId: string, itemId: string, text: string) => void;
+  updateTagItem: (blockId: string, itemId: string, updates: Partial<TagItem>) => void;
   removeTagItem: (blockId: string, itemId: string) => void;
   addTagItem: (blockId: string, text: string) => void;
   isMobile?: boolean;
@@ -117,7 +117,7 @@ interface TagItemEditorProps {
   item: TagItem;
   index: number;
   totalItems: number;
-  updateTagItem: (blockId: string, itemId: string, text: string) => void;
+  updateTagItem: (blockId: string, itemId: string, updates: Partial<TagItem>) => void;
   removeTagItem: (blockId: string, itemId: string) => void;
   isMobile?: boolean;
   reorderTagItems?: (blockId: string, startIndex: number, endIndex: number) => void;
@@ -134,9 +134,16 @@ const TagItemEditor = React.memo(({ provided, snapshot, blockId, item, index, to
   const titleInput = useDebouncedInput(initialTitle, (newTitle) => {
     const combined = tags.length ? `${newTitle.trim()}:\n${tags.join('\n')}` : newTitle.trim();
     if (combined !== item.text) {
-      updateTagItem(blockId, item.id, combined);
+      updateTagItem(blockId, item.id, { text: combined });
     }
   }, 500);
+
+  const urlInput = useDebouncedInput(item.url || '', (newUrl) => {
+    if (newUrl !== item.url) {
+      updateTagItem(blockId, item.id, { url: newUrl });
+    }
+  }, 500);
+
   const [inputValue, setInputValue] = useState('');
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -146,14 +153,14 @@ const TagItemEditor = React.memo(({ provided, snapshot, blockId, item, index, to
       if (val) {
         const newTags = [...tags, val];
         const currentTitle = titleInput.ref.current?.value || initialTitle;
-        updateTagItem(blockId, item.id, newTags.length ? `${currentTitle.trim()}:\n${newTags.join('\n')}` : currentTitle.trim());
+        updateTagItem(blockId, item.id, { text: newTags.length ? `${currentTitle.trim()}:\n${newTags.join('\n')}` : currentTitle.trim() });
         setInputValue('');
       }
     } else if (e.key === 'Backspace' && inputValue === '') {
       if (tags.length > 0) {
         const newTags = tags.slice(0, -1);
         const currentTitle = titleInput.ref.current?.value || initialTitle;
-        updateTagItem(blockId, item.id, newTags.length ? `${currentTitle.trim()}:\n${newTags.join('\n')}` : currentTitle.trim());
+        updateTagItem(blockId, item.id, { text: newTags.length ? `${currentTitle.trim()}:\n${newTags.join('\n')}` : currentTitle.trim() });
       }
     }
   };
@@ -161,7 +168,7 @@ const TagItemEditor = React.memo(({ provided, snapshot, blockId, item, index, to
   const removeTag = (indexToRemove: number) => {
     const newTags = tags.filter((_, i) => i !== indexToRemove);
     const currentTitle = titleInput.ref.current?.value || initialTitle;
-    updateTagItem(blockId, item.id, newTags.length ? `${currentTitle.trim()}:\n${newTags.join('\n')}` : currentTitle.trim());
+    updateTagItem(blockId, item.id, { text: newTags.length ? `${currentTitle.trim()}:\n${newTags.join('\n')}` : currentTitle.trim() });
   };
 
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
@@ -210,14 +217,27 @@ const TagItemEditor = React.memo(({ provided, snapshot, blockId, item, index, to
       )}
       
       <div className="flex-1 grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-4 w-full">
-        <input
-          ref={titleInput.ref as React.Ref<HTMLInputElement>}
-          defaultValue={titleInput.defaultValue}
-          onChange={titleInput.onChange}
-          onBlur={titleInput.onBlur}
-          placeholder={t('editor.tagsBlock.category')}
-          className="bg-transparent border-b border-[#eceae4] hover:border-[#1c1c1c]/20 focus:border-accent outline-none text-base font-medium tracking-wide text-[#1c1c1c] transition-colors pb-1 w-full"
-        />
+        <div className="flex flex-col gap-1.5 justify-start">
+          <input
+            ref={titleInput.ref as React.Ref<HTMLInputElement>}
+            defaultValue={titleInput.defaultValue}
+            onChange={titleInput.onChange}
+            onBlur={titleInput.onBlur}
+            placeholder={t('editor.tagsBlock.category')}
+            className="bg-transparent border-b border-[#eceae4] hover:border-[#1c1c1c]/20 focus:border-accent outline-none text-base font-medium tracking-wide text-[#1c1c1c] transition-colors pb-1 w-full"
+          />
+          <div className="flex items-center gap-1.5 border-b border-[#eceae4] hover:border-[#1c1c1c]/20 focus-within:border-accent transition-colors pb-1 w-full opacity-60 focus-within:opacity-100 group">
+            <LucideIcons.Link className="w-3.5 h-3.5 text-[#5f5f5d]" />
+            <input
+              ref={urlInput.ref as React.Ref<HTMLInputElement>}
+              defaultValue={urlInput.defaultValue}
+              onChange={urlInput.onChange}
+              onBlur={urlInput.onBlur}
+              placeholder={t('editor.tagsBlock.categoryUrlPlaceholder', 'https://... (optional)')}
+              className="bg-transparent outline-none text-xs tracking-wide text-[#5f5f5d] w-full"
+            />
+          </div>
+        </div>
         <div className="border-b border-[#eceae4] hover:border-[#1c1c1c]/20 focus-within:border-accent transition-colors pb-1 w-full flex flex-wrap gap-1.5 items-center cursor-text" onClick={(e) => {
           const input = e.currentTarget.querySelector('input');
           if (input) input.focus();

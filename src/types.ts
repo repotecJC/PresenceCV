@@ -48,6 +48,7 @@ export interface ListItem {
 export interface TagItem {
   id: string;
   text: string;
+  url?: string;
 }
 
 export interface Block {

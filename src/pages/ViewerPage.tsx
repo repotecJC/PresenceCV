@@ -407,7 +407,19 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
 
                     return (
                       <div key={item.id} className="p-4 border rounded-xl bg-gray-50 flex flex-col" style={{ borderColor: 'color-mix(in srgb, var(--theme-accent) 60%, black)' }}>
-                        <h4 className="text-sm font-bold tracking-widest mb-3 text-gray-900">{category}</h4>
+                        {item.url ? (
+                          <div className="mb-3">
+                            <a href={item.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-gray-900 hover:text-accent transition-colors group">
+                              <h4 className="text-sm font-bold tracking-widest">{category}</h4>
+                              <LucideIcons.ExternalLink className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" />
+                            </a>
+                            <div className="text-[10px] text-gray-400 mt-0.5 truncate">
+                              {item.url.replace(/^https?:\/\//, '')}
+                            </div>
+                          </div>
+                        ) : (
+                          <h4 className="text-sm font-bold tracking-widest mb-3 text-gray-900">{category}</h4>
+                        )}
                         <div className="flex flex-wrap gap-2">
                           {tags.map((t, i) => (
                             <span key={i} className="px-3 py-1 bg-white border rounded-full text-xs text-gray-600 block">
@@ -654,9 +666,23 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
                         key={item.id} 
                         className="bg-white p-6 md:p-8 rounded-3xl flex flex-col gap-6 border border-[#eceae4]  cursor-default transition-all duration-300 xl:min-h-[350px] min-h-[150px] shadow-sm hover:shadow-md hover:-translate-y-1 content-start"
                       >
-                        <div className="flex items-center gap-3 border-b border-[#eceae4] pb-4">
-                           <div className="w-1.5 h-1.5 rounded-full bg-accent " />
-                           <h4 className="text-sm xl:text-base tracking-widest text-[#1c1c1c] font-medium">{category}</h4>
+                        <div className="flex flex-col gap-1 border-b border-[#eceae4] pb-4">
+                          <div className="flex items-center gap-3">
+                             <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
+                             {item.url ? (
+                               <a href={item.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-[#1c1c1c] hover:text-accent transition-colors group truncate">
+                                 <h4 className="text-sm xl:text-base tracking-widest font-medium truncate">{category}</h4>
+                                 <LucideIcons.ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity shrink-0" />
+                               </a>
+                             ) : (
+                               <h4 className="text-sm xl:text-base tracking-widest text-[#1c1c1c] font-medium truncate">{category}</h4>
+                             )}
+                          </div>
+                          {item.url && (
+                             <div className="text-xs text-[#5f5f5d] truncate ml-4.5">
+                               {item.url.replace(/^https?:\/\//, '')}
+                             </div>
+                          )}
                         </div>
                         <div className="flex flex-wrap xl:flex-col gap-2 xl:gap-4 mt-2">
                           {tags.map((t, i) => (

@@ -679,7 +679,7 @@ export function useResume() {
   }, []);
 
 
-  const updateTagItem = useCallback( (blockId: string, itemId: string, text: string) => {
+  const updateTagItem = useCallback( (blockId: string, itemId: string, updates: Partial<import('../types').TagItem>) => {
     setData(prev => {
       const block = prev.blocks[blockId];
       return {
@@ -688,7 +688,7 @@ export function useResume() {
           ...prev.blocks,
           [blockId]: {
             ...block,
-            items: (block.items as import('../types').TagItem[]).map(item => item.id === itemId ? { ...item, text } : item)
+            items: (block.items as import('../types').TagItem[]).map(item => item.id === itemId ? { ...item, ...updates } : item)
           }
         }
       };
