@@ -20,8 +20,8 @@ export const sanitizeHtml = (html: string): string => {
 export const migrateLegacyTextToHtml = (text: string): string => {
   if (!text) return '';
   
-  // If it already contains HTML tags, return as is
-  if (text.trim().startsWith('<p>') || text.trim().startsWith('<ul>') || text.trim().startsWith('<ol>')) {
+  // If it already contains HTML tags (like Tiptap's output with attributes), return as is
+  if (/^\s*<(p|ul|ol|h[1-6]|div|blockquote)(>|\s+[^>]*>)/i.test(text)) {
     return text;
   }
 

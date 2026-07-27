@@ -123,12 +123,12 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
       StarterKit.configure({
         bulletList: {
           HTMLAttributes: {
-            class: 'list-disc ml-6 space-y-1',
+            class: 'list-disc ml-6 space-y-1 marker:text-[#1c1c1c]',
           },
         },
         orderedList: {
           HTMLAttributes: {
-            class: 'list-decimal ml-6 space-y-1',
+            class: 'list-decimal ml-6 space-y-1 marker:text-[#1c1c1c]',
           },
         },
       }),
