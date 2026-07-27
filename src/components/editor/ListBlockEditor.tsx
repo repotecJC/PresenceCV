@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Droppable, Draggable } from '@hello-pangea/dnd';
 import * as LucideIcons from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import isEqual from 'fast-deep-equal';
 import { ListItem } from '../../types';
 import { useDebouncedInput } from './InfoEditor';
+import { applyFormatting } from '../../utils/textFormatter';
 
 interface ListBlockEditorProps {
   block: any;
@@ -128,6 +130,23 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
     }
   }, [isConfirmingDelete]);
 
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleFormat = (formatType: import('../../utils/textFormatter').FormatType) => {
+    const el = descInput.ref.current as HTMLTextAreaElement | null;
+    if (!el) return;
+    const start = el.selectionStart || 0;
+    const end = el.selectionEnd || 0;
+    const currentVal = el.value || '';
+    const res = applyFormatting(currentVal, start, end, formatType);
+    el.value = res.text;
+    descInput.onChange({ target: el } as any);
+    setTimeout(() => {
+      el.focus();
+      el.setSelectionRange(res.selectionStart, res.selectionEnd);
+    }, 0);
+  };
+
   return (
     <div 
       ref={provided.innerRef}
@@ -210,20 +229,83 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
             placeholder={t('editor.listBlock.dateRangePlaceholder')}
           />
         </div>
-        <textarea
-          ref={descInput.ref as React.Ref<HTMLTextAreaElement>}
-          defaultValue={descInput.defaultValue}
-          onChange={(e) => {
-            const target = e.target as HTMLTextAreaElement;
-            target.style.height = 'auto';
-            target.style.height = `${target.scrollHeight}px`;
-            descInput.onChange(e);
-          }}
-          onBlur={descInput.onBlur}
-          className="w-full mt-4 bg-[#f9f8f5] border border-[#eceae4] text-[#1c1c1c] rounded-xl p-4 text-sm focus:border-accent/50 outline-none resize-none transition-colors overflow-hidden"
-          rows={3}
-          placeholder={t('editor.listBlock.descriptionPlaceholder')}
-        />
+        <div className="relative mt-4 w-full">
+          <AnimatePresence>
+            {isFocused && (
+              <motion.div
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 5 }}
+                transition={{ duration: 0.15 }}
+                className="absolute -top-10 right-0 z-20 flex items-center gap-1 bg-white/90 backdrop-blur-md border border-[#eceae4] p-1 rounded-xl shadow-md"
+              >
+                <button
+                  type="button"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    handleFormat('bold');
+                  }}
+                  className="p-1.5 rounded-lg text-[#5f5f5d] hover:text-[#1c1c1c] hover:bg-black/5 transition-colors"
+                  title="Bold"
+                >
+                  <LucideIcons.Bold className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    handleFormat('italic');
+                  }}
+                  className="p-1.5 rounded-lg text-[#5f5f5d] hover:text-[#1c1c1c] hover:bg-black/5 transition-colors"
+                  title="Italic"
+                >
+                  <LucideIcons.Italic className="w-3.5 h-3.5" />
+                </button>
+                <div className="w-px h-4 bg-[#eceae4] mx-0.5" />
+                <button
+                  type="button"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    handleFormat('numberList');
+                  }}
+                  className="p-1.5 rounded-lg text-[#5f5f5d] hover:text-[#1c1c1c] hover:bg-black/5 transition-colors"
+                  title="Numbered List"
+                >
+                  <LucideIcons.ListOrdered className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    handleFormat('bulletList');
+                  }}
+                  className="p-1.5 rounded-lg text-[#5f5f5d] hover:text-[#1c1c1c] hover:bg-black/5 transition-colors"
+                  title="Bullet List"
+                >
+                  <LucideIcons.List className="w-3.5 h-3.5" />
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <textarea
+            ref={descInput.ref as React.Ref<HTMLTextAreaElement>}
+            defaultValue={descInput.defaultValue}
+            onFocus={() => setIsFocused(true)}
+            onBlur={(e) => {
+              descInput.onBlur(e);
+              setTimeout(() => setIsFocused(false), 200);
+            }}
+            onChange={(e) => {
+              const target = e.target as HTMLTextAreaElement;
+              target.style.height = 'auto';
+              target.style.height = `${target.scrollHeight}px`;
+              descInput.onChange(e);
+            }}
+            className="w-full bg-[#f9f8f5] border border-[#eceae4] text-[#1c1c1c] rounded-xl p-4 text-sm focus:border-accent/50 outline-none resize-none transition-colors overflow-hidden"
+            rows={3}
+            placeholder={t('editor.listBlock.descriptionPlaceholder')}
+          />
+        </div>
       </div>
     </div>
   );

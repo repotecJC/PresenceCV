@@ -121,7 +121,7 @@ const InfoEditor = React.memo(({ data, updateProfile, updateContactItem, removeC
           defaultValue={titleInput.defaultValue}
           onChange={titleInput.onChange}
           onBlur={titleInput.onBlur}
-          className="text-sm sm:text-lg md:text-xl tracking-[0.2em] sm:tracking-[0.4em] text-text-secondary outline-none focus:border-b focus:border-accent/50 border-b border-transparent transition-colors min-w-0 text-center bg-transparent w-full max-w-full"
+          className="text-sm sm:text-lg md:text-xl font-semibold tracking-[0.2em] sm:tracking-[0.4em] text-text-secondary outline-none focus:border-b focus:border-accent/50 border-b border-transparent transition-colors min-w-0 text-center bg-transparent w-full max-w-full"
           placeholder={t('editor.info.jobTitlePlaceholder')}
         />
       </div>
