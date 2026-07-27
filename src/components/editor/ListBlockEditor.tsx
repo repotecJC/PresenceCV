@@ -6,7 +6,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import isEqual from 'fast-deep-equal';
 import { ListItem } from '../../types';
 import { useDebouncedInput } from './InfoEditor';
-import { applyFormatting } from '../../utils/textFormatter';
+
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Placeholder from '@tiptap/extension-placeholder';
+import { migrateLegacyTextToHtml } from '../../utils/htmlSanitizer';
 
 interface ListBlockEditorProps {
   block: any;
@@ -111,15 +115,23 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
   const titleInput = useDebouncedInput(item.title, (val) => updateListItem(blockId, item.id, 'title', val));
   const subtitleInput = useDebouncedInput(item.subtitle, (val) => updateListItem(blockId, item.id, 'subtitle', val));
   const periodInput = useDebouncedInput(item.period, (val) => updateListItem(blockId, item.id, 'period', val));
-  const descInput = useDebouncedInput(item.description || '', (val) => updateListItem(blockId, item.id, 'description', val));
 
-  React.useEffect(() => {
-    const target = descInput.ref.current as HTMLTextAreaElement | null;
-    if (target) {
-      target.style.height = 'auto';
-      target.style.height = `${target.scrollHeight}px`;
-    }
-  }, []);
+  const [isFocused, setIsFocused] = useState(false);
+  
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Placeholder.configure({
+        placeholder: t('editor.listBlock.descriptionPlaceholder'),
+      }),
+    ],
+    content: migrateLegacyTextToHtml(item.description || ''),
+    onUpdate: ({ editor }) => {
+      updateListItem(blockId, item.id, 'description', editor.getHTML());
+    },
+    onFocus: () => setIsFocused(true),
+    onBlur: () => setTimeout(() => setIsFocused(false), 200),
+  });
 
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
@@ -129,23 +141,6 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
       return () => clearTimeout(timer);
     }
   }, [isConfirmingDelete]);
-
-  const [isFocused, setIsFocused] = useState(false);
-
-  const handleFormat = (formatType: import('../../utils/textFormatter').FormatType) => {
-    const el = descInput.ref.current as HTMLTextAreaElement | null;
-    if (!el) return;
-    const start = el.selectionStart || 0;
-    const end = el.selectionEnd || 0;
-    const currentVal = el.value || '';
-    const res = applyFormatting(currentVal, start, end, formatType);
-    el.value = res.text;
-    descInput.onChange({ target: el } as any);
-    setTimeout(() => {
-      el.focus();
-      el.setSelectionRange(res.selectionStart, res.selectionEnd);
-    }, 0);
-  };
 
   return (
     <div 
@@ -231,7 +226,7 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
         </div>
         <div className="relative mt-4 w-full">
           <AnimatePresence>
-            {isFocused && (
+            {isFocused && editor && (
               <motion.div
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -243,9 +238,9 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
                   type="button"
                   onMouseDown={(e) => {
                     e.preventDefault();
-                    handleFormat('bold');
+                    editor?.chain().focus().toggleBold().run();
                   }}
-                  className="p-1.5 rounded-lg text-[#5f5f5d] hover:text-[#1c1c1c] hover:bg-black/5 transition-colors"
+                  className={`p-1.5 rounded-lg transition-colors ${editor?.isActive('bold') ? 'bg-black/10 text-[#1c1c1c]' : 'text-[#5f5f5d] hover:text-[#1c1c1c] hover:bg-black/5'}`}
                   title="Bold"
                 >
                   <LucideIcons.Bold className="w-3.5 h-3.5" />
@@ -254,9 +249,9 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
                   type="button"
                   onMouseDown={(e) => {
                     e.preventDefault();
-                    handleFormat('italic');
+                    editor?.chain().focus().toggleItalic().run();
                   }}
-                  className="p-1.5 rounded-lg text-[#5f5f5d] hover:text-[#1c1c1c] hover:bg-black/5 transition-colors"
+                  className={`p-1.5 rounded-lg transition-colors ${editor?.isActive('italic') ? 'bg-black/10 text-[#1c1c1c]' : 'text-[#5f5f5d] hover:text-[#1c1c1c] hover:bg-black/5'}`}
                   title="Italic"
                 >
                   <LucideIcons.Italic className="w-3.5 h-3.5" />
@@ -266,9 +261,9 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
                   type="button"
                   onMouseDown={(e) => {
                     e.preventDefault();
-                    handleFormat('numberList');
+                    editor?.chain().focus().toggleOrderedList().run();
                   }}
-                  className="p-1.5 rounded-lg text-[#5f5f5d] hover:text-[#1c1c1c] hover:bg-black/5 transition-colors"
+                  className={`p-1.5 rounded-lg transition-colors ${editor?.isActive('orderedList') ? 'bg-black/10 text-[#1c1c1c]' : 'text-[#5f5f5d] hover:text-[#1c1c1c] hover:bg-black/5'}`}
                   title="Numbered List"
                 >
                   <LucideIcons.ListOrdered className="w-3.5 h-3.5" />
@@ -277,9 +272,9 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
                   type="button"
                   onMouseDown={(e) => {
                     e.preventDefault();
-                    handleFormat('bulletList');
+                    editor?.chain().focus().toggleBulletList().run();
                   }}
-                  className="p-1.5 rounded-lg text-[#5f5f5d] hover:text-[#1c1c1c] hover:bg-black/5 transition-colors"
+                  className={`p-1.5 rounded-lg transition-colors ${editor?.isActive('bulletList') ? 'bg-black/10 text-[#1c1c1c]' : 'text-[#5f5f5d] hover:text-[#1c1c1c] hover:bg-black/5'}`}
                   title="Bullet List"
                 >
                   <LucideIcons.List className="w-3.5 h-3.5" />
@@ -287,24 +282,9 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
               </motion.div>
             )}
           </AnimatePresence>
-          <textarea
-            ref={descInput.ref as React.Ref<HTMLTextAreaElement>}
-            defaultValue={descInput.defaultValue}
-            onFocus={() => setIsFocused(true)}
-            onBlur={(e) => {
-              descInput.onBlur(e);
-              setTimeout(() => setIsFocused(false), 200);
-            }}
-            onChange={(e) => {
-              const target = e.target as HTMLTextAreaElement;
-              target.style.height = 'auto';
-              target.style.height = `${target.scrollHeight}px`;
-              descInput.onChange(e);
-            }}
-            className="w-full bg-[#f9f8f5] border border-[#eceae4] text-[#1c1c1c] rounded-xl p-4 text-sm focus:border-accent/50 outline-none resize-none transition-colors overflow-hidden"
-            rows={3}
-            placeholder={t('editor.listBlock.descriptionPlaceholder')}
-          />
+          <div className="w-full bg-[#f9f8f5] border border-[#eceae4] text-[#1c1c1c] rounded-xl p-4 text-sm focus-within:border-accent/50 outline-none transition-colors overflow-hidden">
+            <EditorContent editor={editor} className="prose prose-sm max-w-none focus:outline-none" />
+          </div>
         </div>
       </div>
     </div>

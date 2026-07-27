@@ -1,0 +1,61 @@
+import DOMPurify from 'dompurify';
+
+/**
+ * Sanitizes HTML to prevent XSS attacks while allowing safe tags used by Tiptap.
+ */
+export const sanitizeHtml = (html: string): string => {
+  if (!html) return '';
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: [
+      'b', 'i', 'em', 'strong', 'a', 'p', 'ul', 'ol', 'li', 'br', 'span'
+    ],
+    ALLOWED_ATTR: ['href', 'target', 'rel', 'class', 'style'],
+  });
+};
+
+/**
+ * Migrates legacy plain text / markdown formats to HTML
+ * for use in Tiptap editor and Viewer rendering.
+ */
+export const migrateLegacyTextToHtml = (text: string): string => {
+  if (!text) return '';
+  
+  // If it already contains HTML tags, return as is
+  if (text.trim().startsWith('<p>') || text.trim().startsWith('<ul>') || text.trim().startsWith('<ol>')) {
+    return text;
+  }
+
+  const html = text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+  const lines = html.split('\n');
+  const processedLines: string[] = [];
+  
+  let inList = false;
+
+  lines.forEach((line) => {
+    const trimmed = line.trim();
+    if (trimmed.startsWith('• ') || trimmed.startsWith('- ')) {
+      if (!inList) {
+        processedLines.push('<ul>');
+        inList = true;
+      }
+      processedLines.push(`<li>${trimmed.replace(/^[•-]\s*/, '')}</li>`);
+    } else {
+      if (inList) {
+        processedLines.push('</ul>');
+        inList = false;
+      }
+      if (trimmed !== '') {
+        processedLines.push(`<p>${line}</p>`);
+      }
+    }
+  });
+
+  if (inList) {
+    processedLines.push('</ul>');
+  }
+
+  return processedLines.join('');
+};

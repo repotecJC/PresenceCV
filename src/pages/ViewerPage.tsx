@@ -43,6 +43,7 @@ import { ResumeData, ListItem, TagItem } from '../types';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { formatUrl } from '../lib/utils';
+import { sanitizeHtml, migrateLegacyTextToHtml } from '../utils/htmlSanitizer';
 
 const ICONS: Record<string, any> = {
   info: LucideIcons.User,
@@ -377,9 +378,11 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
                         </div>
                       )}
                       {item.description && item.description.trim() && (
-                        <p className="text-gray-700 leading-relaxed whitespace-pre-wrap text-sm m-0" style={{ margin: 0 }}>
-                          {item.description.trim()}
-                        </p>
+                        <div 
+                          className="text-gray-700 leading-relaxed text-sm m-0 prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-ul:pl-4" 
+                          style={{ margin: 0 }}
+                          dangerouslySetInnerHTML={{ __html: sanitizeHtml(migrateLegacyTextToHtml(item.description)) }}
+                        />
                       )}
                     </div>
                   ))}
@@ -630,9 +633,11 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
                           {item.period}
                         </div>
                         {item.description && item.description.trim() && (
-                          <p className="text-sm text-[#5f5f5d] leading-relaxed whitespace-pre-wrap  cursor-default m-0" style={{ margin: 0 }}>
-                            {item.description.trim()}
-                          </p>
+                          <div 
+                            className="text-sm text-[#5f5f5d] leading-relaxed cursor-default m-0 prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-ul:pl-4" 
+                            style={{ margin: 0 }}
+                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(migrateLegacyTextToHtml(item.description)) }}
+                          />
                         )}
                       </div>
                     </div>
