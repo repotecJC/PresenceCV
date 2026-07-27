@@ -166,3 +166,41 @@ describe('useResume Transaction Logic', () => {
     expect(savedData.profiles).toHaveProperty('main');
   });
 });
+
+describe('useResume reorderProfiles Logic', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    localStorage.clear();
+  });
+
+  it('reorders profiles correctly in appState.profileOrder', async () => {
+    const { result } = renderHook(() => useResume());
+
+    await act(async () => {
+      await result.current.createProfile('Profile B');
+    });
+    await new Promise(r => setTimeout(r, 20));
+    await act(async () => {
+      await result.current.createProfile('Profile C');
+    });
+
+    const profiles = result.current.appState.profiles;
+    const ids = Object.keys(profiles);
+    expect(ids.length).toBe(3);
+
+    // Initial order should contain all 3 ids
+    expect(result.current.appState.profileOrder).toBeDefined();
+    expect(result.current.appState.profileOrder).toHaveLength(3);
+
+    const firstId = result.current.appState.profileOrder![0];
+    const secondId = result.current.appState.profileOrder![1];
+
+    // Reorder: move index 0 to index 1
+    await act(async () => {
+      result.current.reorderProfiles(0, 1);
+    });
+
+    expect(result.current.appState.profileOrder![0]).toBe(secondId);
+    expect(result.current.appState.profileOrder![1]).toBe(firstId);
+  });
+});

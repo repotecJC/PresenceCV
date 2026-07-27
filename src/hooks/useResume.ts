@@ -52,6 +52,7 @@ export interface ProfileMeta {
 export interface AppState {
   activeProfileId: string;
   profiles: Record<string, ProfileMeta>;
+  profileOrder?: string[];
   updatedAt?: number;
 }
 
@@ -96,7 +97,8 @@ export function useResume() {
       activeProfileId: 'main',
       profiles: {
         'main': { id: 'main', name: 'Main profile', data: DEFAULT_RESUME }
-      }
+      },
+      profileOrder: ['main']
     };
      
     appStateRef.current = defaultState;
@@ -337,13 +339,18 @@ export function useResume() {
         newData.blockOrder.push(bId);
     }
 
-    setAppState(prev => ({
-        activeProfileId: newId,
-        profiles: {
-            ...prev.profiles,
-            [newId]: { id: newId, name, data: sanitizeObject(newData) }
-        }
-    }));
+    setAppState(prev => {
+        const currentOrder = prev.profileOrder ? [...prev.profileOrder, newId] : [...Object.keys(prev.profiles), newId];
+        return {
+            ...prev,
+            activeProfileId: newId,
+            profiles: {
+                ...prev.profiles,
+                [newId]: { id: newId, name, data: sanitizeObject(newData) }
+            },
+            profileOrder: currentOrder
+        };
+    });
   // eslint-disable-next-line react-hooks/exhaustive-deps -- Expected behavior to avoid stale closures and infinite loops
   }, [appState]);
 
@@ -359,13 +366,18 @@ export function useResume() {
     delete newData.liveId;
     delete newData.updateToken;
     
-    setAppState(prev => ({
-      activeProfileId: newId,
-      profiles: {
-        ...prev.profiles,
-        [newId]: { id: newId, name, data: newData }
-      }
-    }));
+    setAppState(prev => {
+      const currentOrder = prev.profileOrder ? [...prev.profileOrder, newId] : [...Object.keys(prev.profiles), newId];
+      return {
+        ...prev,
+        activeProfileId: newId,
+        profiles: {
+          ...prev.profiles,
+          [newId]: { id: newId, name, data: newData }
+        },
+        profileOrder: currentOrder
+      };
+    });
    
   }, [appState]);
 
@@ -387,9 +399,12 @@ export function useResume() {
       const newProfiles = { ...prev.profiles };
       delete newProfiles[id];
       const newActiveId = prev.activeProfileId === id ? Object.keys(newProfiles)[0] : prev.activeProfileId;
+      const newOrder = prev.profileOrder ? prev.profileOrder.filter(pId => pId !== id) : Object.keys(newProfiles);
       const next = {
+        ...prev,
         activeProfileId: newActiveId,
-        profiles: newProfiles
+        profiles: newProfiles,
+        profileOrder: newOrder
       };
       appStateRef.current = next;
       // 結構性變更：使用 transaction 同步至 Firestore
@@ -400,6 +415,29 @@ export function useResume() {
     });
   }, [syncStructuralChange]);
 
+
+  const reorderProfiles = useCallback((startIndex: number, endIndex: number) => {
+    setAppState(prev => {
+      const keys = Object.keys(prev.profiles);
+      const currentOrder = (prev.profileOrder && prev.profileOrder.length === keys.length)
+        ? Array.from(prev.profileOrder)
+        : keys;
+      
+      const [removed] = currentOrder.splice(startIndex, 1);
+      currentOrder.splice(endIndex, 0, removed);
+      
+      const next = {
+        ...prev,
+        profileOrder: currentOrder
+      };
+      
+      appStateRef.current = next;
+      if (isRemoteReady.current) {
+        syncStructuralChange(next);
+      }
+      return next;
+    });
+  }, [syncStructuralChange]);
 
   const toggleAnimation = useCallback( () => {
     setData(prev => ({ ...prev, enableAnimation: !prev.enableAnimation }));
@@ -752,6 +790,7 @@ export function useResume() {
     importResumeProfile,
     renameProfile,
     deleteProfile,
+    reorderProfiles,
     data,
     updateProfile,
     updateThemeColor,

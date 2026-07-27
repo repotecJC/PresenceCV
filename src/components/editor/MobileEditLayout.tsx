@@ -328,11 +328,13 @@ export default function MobileEditLayout(props: EditorLayoutProps) {
           {/* Row 3: Profile Switcher Dropdown */}
           <ProfileSwitcher 
             profiles={appState.profiles}
+            profileOrder={appState.profileOrder}
             activeProfileId={appState.activeProfileId}
             switchProfile={switchProfile}
             createProfile={createProfile}
             renameProfile={renameProfile}
             setProfileToDelete={setProfileToDelete}
+            reorderProfiles={props.reorderProfiles}
             isPro={isPro}
             isAdmin={isAdmin}
             isCollapsed={isSidebarCollapsed}
