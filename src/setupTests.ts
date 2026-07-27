@@ -29,3 +29,8 @@ vi.mock('react-i18next', () => ({
     init: vi.fn(),
   },
 }));
+
+if (typeof window !== 'undefined') {
+  window.HTMLElement.prototype.scrollIntoView = vi.fn();
+}
+

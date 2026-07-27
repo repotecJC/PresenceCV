@@ -347,7 +347,7 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
           </div>
           
           {data.profile.summary && data.profile.summary.trim() && (
-            <div className="mt-12 w-full text-lg leading-relaxed text-gray-700 italic text-left">
+            <div className="mt-12 w-full text-lg leading-relaxed text-gray-700 italic text-left whitespace-pre-wrap">
               {data.profile.summary.trim()}
             </div>
           )}
@@ -599,7 +599,7 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
               <div className="max-w-[900px] w-full px-4 flex justify-center pb-12">
                 <div style={{ width: `${data.profile.summaryWidth || 100}%` }} className="relative">
                   <p 
-                    className="italic text-2xl leading-relaxed text-[#5f5f5d]  cursor-default w-full md:w-[900px] text-left"
+                    className="italic text-2xl leading-relaxed text-[#5f5f5d]  cursor-default w-full md:w-[900px] text-left whitespace-pre-wrap"
                   >
                     {data.profile.summary}
                   </p>
