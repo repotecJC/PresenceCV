@@ -294,7 +294,7 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
             )}
           </AnimatePresence>
           <div className="w-full bg-[#f9f8f5] border border-[#eceae4] text-[#1c1c1c] rounded-xl p-4 text-sm focus-within:border-accent/50 outline-none transition-colors overflow-hidden">
-            <EditorContent editor={editor} className="prose prose-sm max-w-none focus:outline-none" />
+            <EditorContent editor={editor} className="prose prose-sm max-w-none focus:outline-none prose-p:my-0 prose-ul:my-0 prose-ol:my-0 prose-li:my-0" />
           </div>
         </div>
       </div>
