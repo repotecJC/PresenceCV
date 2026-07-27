@@ -123,12 +123,12 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
       StarterKit.configure({
         bulletList: {
           HTMLAttributes: {
-            class: 'list-disc ml-6 space-y-1 marker:text-[#1c1c1c]',
+            class: 'list-disc space-y-1 marker:text-[#1c1c1c]',
           },
         },
         orderedList: {
           HTMLAttributes: {
-            class: 'list-decimal ml-6 space-y-1 marker:text-[#1c1c1c]',
+            class: 'list-decimal space-y-1 marker:text-[#1c1c1c]',
           },
         },
       }),
@@ -294,7 +294,7 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
             )}
           </AnimatePresence>
           <div className="w-full bg-[#f9f8f5] border border-[#eceae4] text-[#1c1c1c] rounded-xl p-4 text-sm focus-within:border-accent/50 outline-none transition-colors overflow-hidden">
-            <EditorContent editor={editor} className="prose prose-sm max-w-none focus:outline-none prose-p:my-0 prose-ul:my-0 prose-ol:my-0 prose-li:my-0" />
+            <EditorContent editor={editor} className="prose prose-sm max-w-none focus:outline-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-ul:pl-5 prose-ol:pl-5" />
           </div>
         </div>
       </div>

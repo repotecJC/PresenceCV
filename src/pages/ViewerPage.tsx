@@ -379,7 +379,7 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
                       )}
                       {item.description && item.description.trim() && (
                         <div 
-                          className="text-gray-700 leading-relaxed text-sm m-0 prose prose-sm max-w-none prose-p:my-0 prose-ul:my-0 prose-ol:my-0 prose-li:my-0 prose-ul:pl-4" 
+                          className="text-gray-700 leading-relaxed text-sm m-0 prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-ul:pl-5 prose-ol:pl-5" 
                           style={{ margin: 0 }}
                           dangerouslySetInnerHTML={{ __html: sanitizeHtml(migrateLegacyTextToHtml(item.description)) }}
                         />
@@ -634,7 +634,7 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
                         </div>
                         {item.description && item.description.trim() && (
                           <div 
-                            className="text-sm text-[#5f5f5d] leading-relaxed cursor-default m-0 prose prose-sm max-w-none prose-p:my-0 prose-ul:my-0 prose-ol:my-0 prose-li:my-0 prose-ul:pl-4" 
+                            className="text-sm text-[#5f5f5d] leading-relaxed cursor-default m-0 prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-ul:pl-5 prose-ol:pl-5" 
                             style={{ margin: 0 }}
                             dangerouslySetInnerHTML={{ __html: sanitizeHtml(migrateLegacyTextToHtml(item.description)) }}
                           />

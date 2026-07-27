@@ -172,5 +172,52 @@ describe('ViewerPage Watermark Rendering', () => {
     const summaryEl = screen.getByText((content) => content.includes('First line'));
     expect(summaryEl.className).toContain('whitespace-pre-wrap');
   });
+
+  it('renders list block description with proper prose spacing classes in list view', () => {
+    const mockData = {
+      isPro: false,
+      profile: { name: 'John Doe' },
+      contactItems: [],
+      blocks: {
+        experience: {
+          id: 'experience',
+          title: 'Experience',
+          type: 'list',
+          items: [
+            { id: '1', title: 'Developer', subtitle: 'Company', period: '2023', description: '<p>Line 1</p><p>Line 2</p>' }
+          ]
+        }
+      },
+      blockOrder: ['experience']
+    };
+    vi.spyOn(Storage.prototype, 'getItem').mockReturnValue(JSON.stringify(mockData));
+
+    vi.mocked(useResume.useResume).mockReturnValue({
+      data: mockData,
+      appState: { profiles: {}, activeProfileId: 'main' },
+      activeTab: 'info',
+      handleUpdate: vi.fn(),
+      createNewProfile: vi.fn(),
+      deleteProfile: vi.fn(),
+      setActiveProfile: vi.fn(),
+      addBlock: vi.fn(),
+      removeBlock: vi.fn(),
+      updateBlock: vi.fn(),
+      reorderBlocks: vi.fn(),
+      isSyncing: false
+    } as any);
+
+    render(
+      <MemoryRouter initialEntries={['/view?print=true']}>
+        <ViewerPage />
+      </MemoryRouter>
+    );
+
+    const descEl = screen.getByText('Line 1').closest('.prose');
+    expect(descEl).not.toBeNull();
+    expect(descEl?.className).toContain('prose-p:my-1');
+  });
 });
+
+
 
