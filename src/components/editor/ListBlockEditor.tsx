@@ -120,7 +120,18 @@ const ListItemEditor = React.memo(({ provided, snapshot, blockId, item, index, t
   
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        bulletList: {
+          HTMLAttributes: {
+            class: 'list-disc ml-6 space-y-1',
+          },
+        },
+        orderedList: {
+          HTMLAttributes: {
+            class: 'list-decimal ml-6 space-y-1',
+          },
+        },
+      }),
       Placeholder.configure({
         placeholder: t('editor.listBlock.descriptionPlaceholder'),
       }),

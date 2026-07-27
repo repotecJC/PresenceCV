@@ -3,7 +3,13 @@
 @plugin "@tailwindcss/typography";
 
 .ProseMirror {
-  outline: none;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none;
+}
+.ProseMirror:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 @theme {
   --font-sans: "Camera Plain Variable", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
