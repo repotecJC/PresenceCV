@@ -199,6 +199,16 @@ export function useResume() {
       });
     } catch (error) {
       console.error("Failed to sync structural change to Firestore:", error);
+      alert('Failed to save to cloud (network error or limit reached). Changes reverted to prevent data loss.');
+      // Rollback to remote state
+      const docRef = doc(db, 'users', user.uid, 'userState', 'state');
+      getDoc(docRef).then(snap => {
+        if(snap.exists()) {
+          const remote = snap.data() as AppState;
+          setAppState(remote);
+          appStateRef.current = remote;
+        }
+      }).catch(console.error);
     }
   }, []);
 

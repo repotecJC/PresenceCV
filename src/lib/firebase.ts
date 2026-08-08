@@ -25,6 +25,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { initializeFirestore, doc, getDocFromServer } from 'firebase/firestore';
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -60,13 +61,18 @@ const app = initializeApp(firebaseConfig);
 
 const databaseId = import.meta.env.VITE_FIREBASE_DATABASE_ID || undefined;
 
-// Use initializeFirestore with experimentalForceLongPolling to bypass WebSockets completely.
-// This is the strongest fix for "client is offline" errors on restrictive networks.
-export const db = initializeFirestore(
-  app, 
-  { experimentalForceLongPolling: true }, 
-  databaseId
-);
+// Init Firestore with experimental long polling for restrictive networks
+export const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true,
+}, databaseId ? databaseId : undefined);
+
+// Init App Check if site key is provided
+if (typeof window !== 'undefined' && import.meta.env.VITE_RECAPTCHA_SITE_KEY) {
+  initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider(import.meta.env.VITE_RECAPTCHA_SITE_KEY),
+    isTokenAutoRefreshEnabled: true
+  });
+}
 
 export const auth = getAuth(app);
 

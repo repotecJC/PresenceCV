@@ -43,7 +43,7 @@ import { ResumeData, ListItem, TagItem } from '../types';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { formatUrl } from '../lib/utils';
-import { sanitizeHtml, migrateLegacyTextToHtml } from '../utils/htmlSanitizer';
+import { sanitizeHtml, migrateLegacyTextToHtml, isSafeUrl } from '../utils/htmlSanitizer';
 
 const ICONS: Record<string, any> = {
   info: LucideIcons.User,
@@ -329,7 +329,7 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
                   return (
                     <div key={item.id} className="flex items-center gap-2">
                       {item.url ? (
-                        <a href={formatUrl(item.url)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm" style={{ color: 'inherit', textDecoration: 'none' }}>
+                        <a href={isSafeUrl(formatUrl(item.url)) ? formatUrl(item.url) : '#'} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm" style={{ color: 'inherit', textDecoration: 'none' }}>
                           {Icon && <Icon className="w-4 h-4 shrink-0" style={{ color: 'color-mix(in srgb, var(--theme-accent) 60%, black)' }} />}
                           {item.text}
                         </a>
@@ -579,7 +579,7 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
                           data.profile.photo && data.profile.photoPosition === 'right' ? 'flex-row-reverse md:flex-row' : ''
                         }`}>
                           {item.url ? (
-                            <a href={formatUrl(item.url)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-lg hover:text-accent transition-colors font-bold">
+                            <a href={isSafeUrl(formatUrl(item.url)) ? formatUrl(item.url) : '#'} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-lg hover:text-accent transition-colors font-bold">
                               {Icon && <Icon className="w-5 h-5 shrink-0 text-accent" />}
                               {item.text}
                             </a>
@@ -674,7 +674,7 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
                           <div className="flex items-center gap-3">
                              <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
                              {item.url ? (
-                               <a href={item.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-[#1c1c1c] hover:text-accent transition-colors group truncate">
+                               <a href={isSafeUrl(item.url) ? item.url : '#'} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-gray-900 hover:text-accent transition-colors group truncate">
                                  <h4 className="text-sm xl:text-base tracking-widest font-medium truncate">{category}</h4>
                                  <LucideIcons.ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity shrink-0" />
                                </a>

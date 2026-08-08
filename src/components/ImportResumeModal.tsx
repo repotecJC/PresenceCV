@@ -25,7 +25,7 @@
  * Depends on: AuthContext, firebase.ts, @google/genai
  * Firestore reads/writes: user_limits/{uid}
  */
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'motion/react';
 import { Upload, X, FileText, Loader2, AlertCircle } from 'lucide-react';
@@ -42,9 +42,20 @@ interface ImportResumeModalProps {
 export const ImportResumeModal: React.FC<ImportResumeModalProps> = ({ isOpen, onClose, onImport }) => {
   const { t } = useTranslation();
   const [isUploading, setIsUploading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user } = useAuth();
+
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
+    if (isUploading) {
+      interval = setInterval(() => {
+        setLoadingStep(prev => (prev + 1) % 4);
+      }, 3500);
+    }
+    return () => clearInterval(interval);
+  }, [isUploading]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -127,8 +138,14 @@ export const ImportResumeModal: React.FC<ImportResumeModalProps> = ({ isOpen, on
       onClose();
     } catch (err: any) {
       console.error("Upload Error:", err);
-      // Show friendly error from server or default fallback
-      setError(err.message || t('importModal.errors.unexpected'));
+      const errorStr = err.message || '';
+      if (errorStr.includes('429')) {
+        setError(t('importModal.errors.rateLimit', '目前解析人數過多，請稍後再試'));
+      } else if (errorStr.includes('Failed to parse resume with AI') || errorStr.includes('500') || errorStr.includes('504')) {
+        setError(t('importModal.errors.aiFailed', '無法解析此格式，建議您直接手動建立，或換一份純文字格式的 PDF 再試一次。'));
+      } else {
+        setError(errorStr || t('importModal.errors.unexpected'));
+      }
     } finally {
       setIsUploading(false);
       // Reset input
@@ -190,7 +207,12 @@ export const ImportResumeModal: React.FC<ImportResumeModalProps> = ({ isOpen, on
                 {isUploading ? (
                   <div className="flex flex-col items-center gap-3">
                     <Loader2 className="w-8 h-8 text-accent animate-spin" />
-                    <p className="text-sm font-medium text-[#1c1c1c]">{t('importModal.parsing')}</p>
+                    <p className="text-sm font-medium text-[#1c1c1c] transition-opacity duration-300">
+                      {loadingStep === 0 && t('importModal.loading.step0', '正在上傳文件...')}
+                      {loadingStep === 1 && t('importModal.loading.step1', 'AI 正在萃取工作經歷...')}
+                      {loadingStep === 2 && t('importModal.loading.step2', '正在分析技能與學歷...')}
+                      {loadingStep === 3 && t('importModal.loading.step3', '最後排版中，請稍候...')}
+                    </p>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center gap-2">

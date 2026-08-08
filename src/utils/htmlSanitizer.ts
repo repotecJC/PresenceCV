@@ -1,6 +1,24 @@
 import DOMPurify from 'dompurify';
 
 /**
+ * Validates a URL to prevent javascript: XSS attacks.
+ * Only allows http:, https:, mailto:, and tel: protocols.
+ */
+export const isSafeUrl = (url: string | undefined): boolean => {
+  if (!url) return false;
+  // Allow relative URLs or anchors
+  if (url.startsWith('/') || url.startsWith('#')) return true;
+  
+  try {
+    const parsed = new URL(url);
+    return ['http:', 'https:', 'mailto:', 'tel:'].includes(parsed.protocol);
+  } catch {
+    // If it can't be parsed as a URL and doesn't start with / or #
+    return false;
+  }
+};
+
+/**
  * Sanitizes HTML to prevent XSS attacks while allowing safe tags used by Tiptap.
  */
 export const sanitizeHtml = (html: string): string => {

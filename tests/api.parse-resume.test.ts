@@ -61,6 +61,7 @@ describe('API Route: /api/parse-resume', () => {
     };
 
     res = {
+      setHeader: vi.fn().mockReturnThis(),
       status: vi.fn().mockReturnThis(),
       json: vi.fn()
     };
