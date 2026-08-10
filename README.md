@@ -184,8 +184,6 @@ PresenceCV/
     └── utils/               # Sanitization (DOMPurify), RateLimiter, Exporters
 ```
 
-For a comprehensive architecture overview, see [**進階專案架構說明**](.agents/HumanMap.md).
-
 ---
 
 ## 🔒 Security & Admin
