@@ -18,10 +18,10 @@ PresenceCV is a modern, AI-powered online resume builder built with React, TypeS
 | **Multi-Language (i18n)** | Seamless internationalization with English and Traditional Chinese UI switching |
 | **XSS & URL Sanitization** | DOMPurify-powered sanitization preventing `javascript:` XSS script execution |
 | **Rate Limiting & Security** | Upstash Redis API rate limiter and Firebase App Check bot protection |
-| **Theme Colors** | 6 preset themes + custom hex color picker |
+| **Theme Accent Colors** | 6 preset accent colors + custom hex color picker |
 | **Photo Upload** | Upload and crop a profile photo with an in-browser cropper |
 | **Drag & Drop** | Reorder sections and items with smooth drag-and-drop |
-| **Dark Glassmorphic UI** | Premium dark-mode design with animated backgrounds |
+| **Warm Glassmorphic UI** | Premium warm cream-tone aesthetic with glassmorphic cards and animated smoke background |
 
 ---
 

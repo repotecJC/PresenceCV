@@ -2,8 +2,8 @@
  * LandingPage.tsx — Marketing Homepage
  *
  * The public-facing landing page for PresenceCV, accessible at "/".
- * Designed with a warm cream-tone aesthetic (bg-[#f7f4ed]) contrasting
- * the dark glassmorphic editor.
+ * Designed with a warm cream-tone aesthetic (bg-[#f7f4ed]) matching
+ * the warm glassmorphic editor.
  *
  * Sections:
  * 1. Navigation Bar: Logo, Features/Pricing links, Login/Logout buttons (responsive)

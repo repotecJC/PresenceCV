@@ -7,7 +7,7 @@
  * A multi-mode component that displays resumes in three distinct ways:
  *
  * 1. Normal View (no query params): Shows the current user's resume from
- *    useResume hook with a dark glassmorphic design. Features tab navigation
+ *    useResume hook with a warm glassmorphic design. Features tab navigation
  *    with animated transitions between Info, Experience, Skills, etc.
  *
  * 2. Shared View (?id=xxx or ?live=xxx): Fetches resume data from Firestore
