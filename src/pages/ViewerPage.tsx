@@ -412,7 +412,7 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
                       <div key={item.id} className="p-4 border rounded-xl bg-gray-50 flex flex-col" style={{ borderColor: 'color-mix(in srgb, var(--theme-accent) 60%, black)' }}>
                         {item.url ? (
                           <div className="mb-3">
-                            <a href={item.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-gray-900 hover:text-accent transition-colors group">
+                            <a href={isSafeUrl(formatUrl(item.url)) ? formatUrl(item.url) : '#'} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-gray-900 hover:text-accent transition-colors group">
                               <h4 className="text-sm font-bold tracking-widest">{category}</h4>
                               <LucideIcons.ExternalLink className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" />
                             </a>
