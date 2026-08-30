@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import ViewerPage from '../src/pages/ViewerPage';
 import * as useResume from '../src/hooks/useResume';
@@ -224,6 +224,64 @@ describe('ViewerPage Watermark Rendering', () => {
 
     // Legitimate URLs are still linked.
     expect(screen.getByText('Portfolio').closest('a')?.getAttribute('href')).toBe('https://example.com/portfolio');
+  });
+
+  describe('print-mode postMessage origin check', () => {
+    const setupPrintMock = () => {
+      // No localStorage payload: the print view must wait for a postMessage sync.
+      vi.spyOn(Storage.prototype, 'getItem').mockReturnValue(null);
+
+      vi.mocked(useResume.useResume).mockReturnValue({
+        data: { isPro: true, profile: { name: 'Real User' }, contactItems: [], blocks: {}, blockOrder: [] },
+        appState: { profiles: {}, activeProfileId: 'main' },
+        activeTab: 'info',
+        handleUpdate: vi.fn(),
+        createNewProfile: vi.fn(),
+        deleteProfile: vi.fn(),
+        setActiveProfile: vi.fn(),
+        addBlock: vi.fn(),
+        removeBlock: vi.fn(),
+        updateBlock: vi.fn(),
+        reorderBlocks: vi.fn(),
+        isSyncing: false
+      } as any);
+    };
+
+    const dispatchSync = (origin: string, name: string) => {
+      const event = new MessageEvent('message', {
+        data: { type: 'RESUME_DATA_SYNC', data: { isPro: true, profile: { name }, contactItems: [], blocks: {}, blockOrder: [] } }
+      });
+      Object.defineProperty(event, 'origin', { value: origin });
+      act(() => { window.dispatchEvent(event); });
+    };
+
+    it('ignores RESUME_DATA_SYNC from a foreign origin', () => {
+      setupPrintMock();
+
+      render(
+        <MemoryRouter initialEntries={['/view?print=true']}>
+          <ViewerPage />
+        </MemoryRouter>
+      );
+
+      dispatchSync('https://evil.example', 'Injected By Attacker');
+
+      expect(screen.queryByText('Injected By Attacker')).not.toBeInTheDocument();
+    });
+
+    it('accepts RESUME_DATA_SYNC from the same origin', () => {
+      setupPrintMock();
+
+      render(
+        <MemoryRouter initialEntries={['/view?print=true']}>
+          <ViewerPage />
+        </MemoryRouter>
+      );
+
+      dispatchSync(window.location.origin, 'Synced User');
+
+      expect(screen.getByText('Synced User')).toBeInTheDocument();
+    });
   });
 
   it('renders list block description with proper prose spacing classes in list view', () => {

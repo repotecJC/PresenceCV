@@ -126,6 +126,9 @@ export default function ViewerPage({ testData }: { testData?: unknown }) {
     }
 
     const handleMessage = (event: MessageEvent) => {
+      // Only accept sync payloads from our own editor window; otherwise any page
+      // holding a handle to this view could inject resume content.
+      if (event.origin !== window.location.origin) return;
       if (event.data?.type === 'RESUME_DATA_SYNC') {
         setSyncData(event.data.data);
         if (window.opener) {
