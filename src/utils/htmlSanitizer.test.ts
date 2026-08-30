@@ -35,6 +35,17 @@ describe('isSafeUrl', () => {
     expect(isSafeUrl('file:///etc/passwd')).toBe(false);
   });
 
+  it('should block protocol-relative URLs that navigate off-site', () => {
+    // '//evil.com' and '/\\evil.com' both resolve to https://evil.com in a browser,
+    // so they must not pass as same-origin relative paths.
+    expect(isSafeUrl('//evil.com')).toBe(false);
+    expect(isSafeUrl('//evil.com/path')).toBe(false);
+    expect(isSafeUrl('/\\evil.com')).toBe(false);
+    // Genuine same-origin paths still pass.
+    expect(isSafeUrl('/view')).toBe(true);
+    expect(isSafeUrl('/edit?id=1')).toBe(true);
+  });
+
   it('should block strings that are not parseable URLs', () => {
     expect(isSafeUrl('example.com')).toBe(false);
     expect(isSafeUrl('not a url')).toBe(false);
